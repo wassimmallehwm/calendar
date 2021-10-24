@@ -1,0 +1,12 @@
+.fc-toolbar-title{
+    text-transform: capitalize;
+  }
+  
+  @media only screen and (max-width: 700px) {
+    #main-container {
+      height: 90vh !important;
+    }
+    #main-container > div {
+      height: inherit !important;
+    }
+  }
