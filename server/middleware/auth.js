@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model')
+const User = require('../modules/user/user.model')
 
 module.exports.auth = (req, res, next) => {
     try{
@@ -25,33 +25,34 @@ module.exports.auth = (req, res, next) => {
         }
     }
 }
-module.exports.admin = async (req, res, next) => {
-    try{
-        const user = await User.findById(req.user)
-        .populate({ path: 'roles', model: 'Role', select: 'label' })
-        .exec();
-        const adminRole = user.roles.find(elem => elem.label === 'ADMIN');
-        if(!adminRole){
-            return res.status(403).json({msg : "Not Authorized (Admin Route) !"})
-        }
-        next();
-    } catch(e){
-        res.status(500).json({error: e});
-    }
-}
-module.exports.ownerOrAdmin = async (req, res, next) => {
-    try{
-        const {id} = req.params;
-        const user = await User.findById(req.user)
-        .populate('roles')
-        .exec();
-        if(user.role.label != 'ADMIN' && user._id != id){
-            return res.status(403).json({msg : "Not Authorized !"})
-        }
-        next();
-    } catch(e){
-        res.status(500).json({error: e});
-    }
-}
+
+// module.exports.admin = async (req, res, next) => {
+//     try{
+//         const user = await User.findById(req.user)
+//         .populate({ path: 'roles', model: 'Role', select: 'label' })
+//         .exec();
+//         const adminRole = user.roles.find(elem => elem.label === 'ADMIN');
+//         if(!adminRole){
+//             return res.status(403).json({msg : "Not Authorized (Admin Route) !"})
+//         }
+//         next();
+//     } catch(e){
+//         res.status(500).json({error: e});
+//     }
+// }
+// module.exports.ownerOrAdmin = async (req, res, next) => {
+//     try{
+//         const {id} = req.params;
+//         const user = await User.findById(req.user)
+//         .populate('roles')
+//         .exec();
+//         if(user.role.label != 'ADMIN' && user._id != id){
+//             return res.status(403).json({msg : "Not Authorized !"})
+//         }
+//         next();
+//     } catch(e){
+//         res.status(500).json({error: e});
+//     }
+// }
 
 

@@ -1,8 +1,10 @@
 import Axios from 'axios';
-import config from '../../../config/config';
+import { Config } from '../../../config/Config';
+import { BaseService } from '../../../shared/services/base.service';
 
-const API_URL = config.apiUrl + "users/";
+const API_URL = "users/";
+const baseService = new BaseService()
 
 export const authenticate = (data) => {
-    return Axios.post(API_URL + "login", data);
+    return baseService.httpClient(API_URL + "login", 'POST', data)
 }

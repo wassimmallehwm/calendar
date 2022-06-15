@@ -1,3 +1,4 @@
+
 const errorHandler = (err) => {
     let required = false;
     let message = '';
@@ -10,7 +11,7 @@ const errorHandler = (err) => {
         }
         message = required ? 'requiredError' : 'invalidError'
         status = 400;
-    } else if (err.name === 'MongoError' && err.code === 11000) {
+    } else if ((err.name === 'MongoError' || err.name === 'MongoServerError') && err.code === 11000) {
         message = 'duplicateError'
         status = 409;
     } else if (err.name === 'SyntaxError') {
@@ -24,3 +25,4 @@ const errorHandler = (err) => {
 }
 
 module.exports = errorHandler;
+    
