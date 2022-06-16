@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -6,7 +6,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 //import './calendar.css';
-import EventsModal from '../events/events-modal/EventsModal';
+import EventsModal from '../events-modal/EventsModal';
+import { EventsService } from '../events.service';
 
 
 function createDateAsUTC(date: any) {
@@ -17,7 +18,8 @@ function convertDateToUTC(date: any) {
   return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 }
 
-function Calendar() {
+const Calendar = () => {
+  const eventsService = new EventsService()
   const calendarRef = useRef<any>()
   const [value, onChange] = useState(new Date());
   const [events, setEvents] = useState([{
@@ -36,8 +38,40 @@ function Calendar() {
     textColor: '#000000',
     backgroundColor: 'rgba(130, 200, 230, 0.5)'
   }]);
+
+  /**
+   * {
+    id: '1',
+    title: 'First event',
+    start: new Date().toISOString().slice(0, 10)+ "T12:00:00",
+    end: new Date().toISOString().slice(0, 10)+ "T14:00:00",
+    textColor: '#000000',
+    backgroundColor: 'rgba(130, 200, 230, 0.5)'
+  }, {
+    id: '2',
+    title: 'Second event',
+    start: '2021-12-01',
+    end: '2021-12-06',
+    //url: 'https://wassimmalleh.com'
+    textColor: '#000000',
+    backgroundColor: 'rgba(130, 200, 230, 0.5)'
+  }
+   */
+
+  const getEvents = () => {
+    eventsService.findAll().then(
+      res => {
+        console.log(res.data)
+        setEvents(res.data)
+      }
+    )
+  }
+
+  useEffect(() => {
+    getEvents()
+  }, [])
   const options: CalendarOptions = {
-    height: '86vh',
+    height: '80vh',
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     //defaultView: 'dayGridMonth',
     //defaultDate: value,
@@ -111,7 +145,7 @@ function Calendar() {
   return (
     <div id="main-container" style={{ padding: '1rem' }}>
     <button onClick={next}>NEXT</button>
-      <EventsModal/>
+      {/* <EventsModal/> */}
     {/* <button onClick={changeView}>CHANGE</button>
       <button onClick={prev}>prev</button>
       <button onClick={next}>NEXT</button>

@@ -4,7 +4,7 @@ import './App.css';
 import Layout from './components/layout/Layout';
 import Login from './components/modules/auth/Login';
 
-import Calendar from './components/modules/calendar/Calendar';
+import Calendar from './components/modules/events/calendar/Calendar';
 import { AppContext } from './contexts';
 import { Loader } from './shared/components';
 import { GuestRoute, ProtectedRoute } from './shared/guards';

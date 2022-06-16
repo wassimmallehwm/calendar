@@ -1,5 +1,19 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
+const { formateDate } = require('../../utils/date');
+
+const transform = (doc, ret) => {
+    ret.id = ret._id;
+    ret.start = formateDate(ret.startDate) + "T" + ret.startTime + ":00";
+    ret.end = formateDate(ret.endDate) + "T" + ret.endTime + ":00";
+    ret.url = ret.eventUrl
+    delete ret.startDate;
+    delete ret.startTime;
+    delete ret.endDate;
+    delete ret.endTime;
+    delete ret.eventUrl;
+    delete ret._id;
+}
 
 const EventSchema = new mongoose.Schema({
     title: {
@@ -49,9 +63,13 @@ const EventSchema = new mongoose.Schema({
         required: false,
         unique: false,
     },
-    
+
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
+        transform
+    }
 });
 
 EventSchema.plugin(mongoosePaginate);

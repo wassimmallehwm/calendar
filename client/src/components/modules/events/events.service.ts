@@ -17,7 +17,7 @@ export class EventsService extends BaseService {
     }
 
     findAll(query?: any){
-        return this.httpClient(this.httpUrl('findall'), 'GET', query);
+        return this.httpClient(this.httpUrl(''), 'GET', query);
     }
 
     list(query?: any){
