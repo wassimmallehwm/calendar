@@ -1,0 +1,169 @@
+const { ResponseSuccess, ResponseError } = require("../../shared/response");
+const { ErrorsHandler } = require("../../utils");
+const path = require('path');
+const { APP_NAME } = require("../../config");
+const Event = require("./event.model");
+const EventDto = require("./event.dto");
+
+const SERVICE_NAME = "EventsService"
+
+class EventsService {
+
+    instance;
+
+    constructor() {
+    }
+
+    static createInstance() {
+        return new EventsService()
+    }
+
+    static getInstance() {
+        if (this.instance == null) {
+            this.instance = this.createInstance()
+        }
+        return this.instance
+    }
+
+    create = async (data) => {
+        try {
+            const event = new Event(data)
+            const result = await event.save();
+            return new ResponseSuccess({
+                status: 200,
+                content: EventDto(result)
+            })
+
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:create`)
+            )
+        }
+    }
+
+    findById = async (id) => {
+        try {
+            const result = await Event.findById(id)
+                .populate({ path: 'createdBy', model: 'User' });
+            if (!result) {
+                return new ResponseError({
+                    status: 404,
+                    message: "Event not found !"
+                })
+            }
+            return new ResponseSuccess({
+                status: 200,
+                content: EventDto(result)
+            })
+
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:findById`)
+            )
+        }
+    }
+
+    findAll = async (query = {}) => {
+        try {
+            let result = await Event.find(query)
+                .populate({ path: 'createdBy', model: 'User' });
+            if (result) {
+                result = result.map(elem => new EventDto(elem))
+                return new ResponseSuccess({
+                    status: 200,
+                    content: result
+                })
+            }
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:findAll`)
+            )
+        }
+    }
+
+    findAllPaginated = async ({ page, limit, sortField, sortOrder, search }) => {
+        try {
+            let filter = {}
+            if (search && search.trim() !== "") {
+                filter = {
+                    $or: [
+                        { title: { $regex: search, $options: 'i' } }
+                    ]
+                }
+            }
+            const total = await Event.find(filter)
+                .count()
+                .exec();
+
+            let result = await Event.find(filter)
+                .skip((page - 1) * limit)
+                .limit(limit)
+                .sort({ [sortField]: sortOrder })
+                .populate({ path: 'createdBy', model: 'User' })
+                .exec();
+
+            if (result) {
+                result = result.map(elem => new EventDto(elem))
+                return new ResponseSuccess({
+                    status: 200,
+                    content: {
+                        page,
+                        limit,
+                        total,
+                        pages: Math.ceil(total / limit),
+                        docs: result
+                    }
+                })
+            }
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:findAllPaginated`)
+            )
+        }
+    }
+
+    update = async (id, data) => {
+        try {
+            const item = await Event.findById(id)
+            if (!item)
+                return new ResponseError({
+                    status: 404,
+                    message: "Event not found !"
+                })
+            let result = await Event.findOneAndUpdate({ _id: id }, data, { new: true });
+            result = await result.populate({ path: 'createdBy', model: 'User' });
+
+            return new ResponseSuccess({
+                status: 200,
+                content: new EventDto(result)
+            })
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:update`)
+            )
+        }
+    }
+
+    delete = async (id) => {
+        try {
+            const item = await Event.findById(id)
+            if (!item)
+                return new ResponseError({
+                    status: 404,
+                    message: "Event not found !"
+                })
+            const result = await Event.deleteOne({ _id: id });
+
+            return new ResponseSuccess({
+                status: 200,
+                content: result
+            })
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:delete`)
+            )
+        }
+    }
+}
+
+module.exports = EventsService.getInstance()
