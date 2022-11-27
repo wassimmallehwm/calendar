@@ -24,20 +24,20 @@ const Navbar = () => {
     ]
     return (
         <header className="bg-primary-400 shadow-md h-12 flex items-center justify-center fixed w-full z-5">
-            <div className="flex flex-grow items-center justify-between px-3">
+            <div className="flex flex-grow items-center justify-between text-slate-50 px-3">
                 <button className="w-10 p-1"
                     onClick={() => { }}
                     title="Toggle menu"
                     tabIndex={1}
                 >
-                    <FaBars className="text-black" size="25px" />
+                    <FaBars className="text-slate-50" size="25px" />
                 </button>
                 <button className="p-1 flex items-center"
                     onClick={onLogout}
                     title="Sign out"
                     tabIndex={1}
                 >
-                    <FaSignOutAlt className="text-black mx-1" size="25px" />
+                    <FaSignOutAlt className="text-slate-50 mx-1" size="25px" />
                     Sign out
                 </button>
                 {/* <Menu as="div" className="ml-3 relative">

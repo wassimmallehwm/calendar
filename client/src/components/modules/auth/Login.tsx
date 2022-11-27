@@ -7,7 +7,7 @@ import './login.css'
 
 const Login = () => {
     const { login } = useContext(AuthContext)
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const [loginInfo, setLoginInfo] = useState({
         username: '',
         password: ''
@@ -29,7 +29,7 @@ const Login = () => {
                 navigate('/')
             },
             error => {
-                console.log("ERROR", error.response.data.msg);
+                console.log("ERROR", error.response.data);
             }
         )
     }
@@ -47,14 +47,14 @@ const Login = () => {
                             Identifiant
                         </label>
                         <input type="text" name="username" onChange={onChange} value={username}
-                        className="w-full p-2 border border-gray-300 rounded mt-1" />
+                            className="w-full p-2 border border-gray-300 rounded mt-1" />
                     </div>
                     <div>
                         <label className="text-sm font-bold text-gray-600 block">
                             Mot de passe
                         </label>
                         <input type="password" name="password" onChange={onChange} value={password}
-                        className="w-full p-2 border border-gray-300 rounded mt-1" />
+                            className="w-full p-2 border border-gray-300 rounded mt-1" />
                     </div>
                     <div className="flex items-center justify-between">
                         <div>

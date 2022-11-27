@@ -2,8 +2,8 @@ const jwtService = require('../token/jwt.service');
 const jwt = require('jsonwebtoken')
 
 const getToken = (req, name) => {
-    return req.header(name);
-    //return req.cookies[cookie]
+    //return req.header(name);
+    return req.cookies[name]
 }
 
 const authenticated = (req, res, next) => {

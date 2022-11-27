@@ -2,7 +2,7 @@ import Axios from 'axios';
 import { Config } from '../../../config/Config';
 import { BaseService } from '../../../shared/services/base.service';
 
-const API_URL = "users/";
+const API_URL = "auth/";
 const baseService = new BaseService()
 
 export const authenticate = (data) => {
