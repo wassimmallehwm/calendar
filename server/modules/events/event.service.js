@@ -31,7 +31,7 @@ class EventsService {
             const result = await event.save();
             return new ResponseSuccess({
                 status: 200,
-                content: EventDto(result)
+                content: new EventDto(result)
             })
 
         } catch (err) {
@@ -53,7 +53,7 @@ class EventsService {
             }
             return new ResponseSuccess({
                 status: 200,
-                content: EventDto(result)
+                content: new EventDto(result)
             })
 
         } catch (err) {
@@ -77,6 +77,27 @@ class EventsService {
         } catch (err) {
             return new ResponseError(
                 ErrorsHandler.handle(err, `${SERVICE_NAME}:findAll`)
+            )
+        }
+    }
+
+    findByRange = async (start, end) => {
+        try {
+            let result = await Event.find({
+                startDate: { $gte: start },
+                endDate: { $lte: end }
+            })
+                .populate({ path: 'createdBy', model: 'User' });
+            if (result) {
+                result = result.map(elem => new EventDto(elem))
+                return new ResponseSuccess({
+                    status: 200,
+                    content: result
+                })
+            }
+        } catch (err) {
+            return new ResponseError(
+                ErrorsHandler.handle(err, `${SERVICE_NAME}:findByRange`)
             )
         }
     }

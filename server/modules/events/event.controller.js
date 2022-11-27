@@ -36,6 +36,22 @@ module.exports.getAll = async (req, res) => {
   }
 };
 
+module.exports.getByRange = async (req, res) => {
+  try {
+    const { start, end } = req.query
+    const {
+      success,
+      status,
+      content,
+      message
+    } = await EventsService.findByRange(start, end)
+    res.status(status).json(success ? content : { message });
+  } catch (err) {
+    const { status, message } = ErrorsHandler.handle(err, `${SERVICE_NAME}:getByRange`)
+    res.status(status).json({ message, entity: ENTITY_NAME })
+  }
+};
+
 module.exports.getById = async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,4 +1,5 @@
 const moment = require("moment");
+const { UserDto } = require("../users");
 
 const formatEventDate = (date, time) => {
     if (time && time.trim() != "") {
@@ -19,6 +20,7 @@ module.exports = class EventDto {
         endDate,
         endTime,
         eventUrl,
+        createdBy,
         createdAt
     }) {
         this.id = _id;
@@ -33,6 +35,7 @@ module.exports = class EventDto {
         this.start = formatEventDate(startDate, startTime);
         this.end = formatEventDate(endDate, endTime);
         this.eventUrl = eventUrl
+        this.createdBy = createdBy ? new UserDto(createdBy) : null
         this.createdAt = createdAt
     }
 }

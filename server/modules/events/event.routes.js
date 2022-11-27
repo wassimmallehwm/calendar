@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const { authenticated } = require('../../security/middlewares');
-const { create, getAll, getById, getPaginated, update, remove} = require('./event.controller');
+const { create, getAll, getByRange, getById, getPaginated, update, remove} = require('./event.controller');
 
 router.post('/', authenticated, create);
 
 router.get('/', getAll);
+
+router.get('/by-range', getByRange);
 
 router.get('/list', getPaginated);
 
