@@ -5,16 +5,70 @@ export class BaseService {
     API_URL = Config.getConfig().apiUrl;
 
     constructor() {
-        Axios.interceptors.request.use(function (config) {
-            const userData: any = localStorage.getItem('userData');
-            if (userData) {
-                const token = JSON.parse(userData).token;
-                if (config && config.headers)
-                    config.headers['x-auth-token'] = token;
-            }
+        Axios.defaults.withCredentials = true;
+        this.interceptToken(() => {
+            localStorage.removeItem('userData')
+            window.location.reload()
+        })
+        // Axios.interceptors.request.use(function (config) {
+        //     const userData: any = localStorage.getItem('userData');
+        //     if (userData) {
+        //         const token = JSON.parse(userData).token;
+        //         if (config && config.headers)
+        //             config.headers['x-auth-token'] = token;
+        //     }
 
-            return config;
+        //     return config;
+        // });
+    }
+
+    private interceptToken(logout: any) {
+        Axios.interceptors.response.use(
+            (res) => res,
+            (error) => {
+                if (
+                    error.config &&
+                    error.response?.status === 401 &&
+                    error.response?.data?.message === "token_expired" &&
+                    !error.config.__isRetry
+                ) {
+                    return new Promise((resolve, reject) => {
+                        this.refreshToken(error.config, logout)
+                            .then((result) => {
+                                resolve(result);
+                            })
+                            .catch((err) => {
+                                reject(err);
+                            });
+                    });
+                }
+                return Promise.reject(error);
+            });
+    }
+
+    private refreshToken(config: any, logout: any) {
+        return new Promise((resolve, reject) => {
+            this.refresh()
+                .then((res: any) => {
+                    Axios
+                        .request(config)
+                        .then((result) => {
+                            return resolve(result);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return reject(err);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    logout();
+                });
         });
+    };
+
+    private async refresh(){
+        return this.httpClient("auth/refresh-token", 'POST')
     }
 
 
