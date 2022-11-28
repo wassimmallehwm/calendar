@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: theme => ({
-        'homePage': "url('http://localhost:3030/api/settings/cover')"
+        'homePage': "url('http://localhost:4000/api/settings/cover')"
       }),
       colors: {
         'primary': {

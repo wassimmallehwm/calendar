@@ -1,7 +1,7 @@
 module.exports = {
     APP_NAME: process.env.APP_NAME || 'Municipality',
     DATABASE_URL: process.env.DATABASE_URL || 'mongodb://localhost:27017/municipality',
-    PORT: process.env.PORT || 3030,
+    PORT: process.env.PORT || 4000,
     //JWT config
     JWT_SECRET: process.env.JWT_SECRET || '$2a$10$.6vrQSA.tIpm.C1thlZ8fOKrnJ6RzHNdcdWNXPEeio0QZxrO241zW',
     JWT_ACCESS_EXPIRATION : process.env.JWT_ACCESS_EXPIRATION || '600s',
@@ -19,6 +19,6 @@ module.exports = {
     
     //Client config
     CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:3000/',
-    PUBLIC_URL: process.env.PUBLIC_URL || 'http://localhost:3030/public/',
-    DEFAULT_LOGO: process.env.DEFAULT_LOGO || 'http://localhost:3030/public/images/logo.png',
+    PUBLIC_URL: process.env.PUBLIC_URL || 'http://localhost:4000/public/',
+    DEFAULT_LOGO: process.env.DEFAULT_LOGO || 'http://localhost:4000/public/images/logo.png',
 }
