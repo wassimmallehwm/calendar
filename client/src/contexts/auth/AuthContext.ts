@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthResponse } from '../../shared/types';
+import { AuthResponse } from '@shared/types';
 
 export interface AuthContextInterface {
   user: any | null;

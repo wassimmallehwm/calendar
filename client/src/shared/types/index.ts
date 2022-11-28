@@ -1,5 +1,8 @@
 import { AuthResponse } from "./auth-response";
 import { ErrorData } from "./error-data";
+import { Page } from "./page";
+import { Route } from "./route";
 import { Settings } from "./settings";
 
-export { AuthResponse, Settings, ErrorData }
+export { AuthResponse, ErrorData };
+export type { Route, Settings, Page };

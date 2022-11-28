@@ -1,0 +1,22 @@
+[
+    {
+        "title" : "Information",
+        "icon" : "Ai/AiOutlineInfoCircle",
+        "component" : "Step1"
+    },
+    {
+        "title" : "Details",
+        "icon" : "Ai/AiOutlineSetting",
+        "component" : "Step2"
+    },
+    {
+        "title" : "Contact",
+        "icon" : "Ai/AiOutlineIdcard",
+        "component" : "Step3"
+    },
+    {
+        "title" : "Media",
+        "icon" : "Ai/AiOutlinePicture",
+        "component" : "Step4"
+    }
+]

@@ -1,0 +1,16 @@
+.fc-toolbar-title{
+  text-transform: capitalize;
+}
+#main-container{
+  max-width: 1024px!important;
+  margin: auto!important;
+}
+  
+@media only screen and (max-width: 700px) {
+  #main-container {
+    height: 90vh !important;
+  }
+  .my-calendar {
+    height: inherit !important;
+  }
+}

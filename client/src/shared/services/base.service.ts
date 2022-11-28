@@ -1,25 +1,18 @@
 import Axios, { Method } from "axios";
+import Cookies from 'universal-cookie';
 import { Config } from "../../config/Config";
+import storageService from "./storage.service";
 
 export class BaseService {
-    API_URL = Config.getConfig().apiUrl;
+    protected API_URL = Config.getConfig().apiUrl;
+    private cookies = new Cookies();
 
     constructor() {
         Axios.defaults.withCredentials = true;
         this.interceptToken(() => {
-            localStorage.removeItem('userData')
+            storageService.clearUserData()
             window.location.reload()
         })
-        // Axios.interceptors.request.use(function (config) {
-        //     const userData: any = localStorage.getItem('userData');
-        //     if (userData) {
-        //         const token = JSON.parse(userData).token;
-        //         if (config && config.headers)
-        //             config.headers['x-auth-token'] = token;
-        //     }
-
-        //     return config;
-        // });
     }
 
     private interceptToken(logout: any) {
@@ -72,12 +65,11 @@ export class BaseService {
     }
 
 
-    async httpClient(
+    protected async httpClient<T>(
         apiUrl: string,
         method: Method,
         body?: any,
         headers?: any,
-        responseType?: any,
         uploadReq?: boolean,
         uploadCallback?: any
     ) {
@@ -106,6 +98,6 @@ export class BaseService {
             onUploadProgress: uploadReq ? uploadCallback : null
         };
 
-        return Axios.request<typeof responseType>(options);
+        return Axios.request<T>(options);
     }
 }

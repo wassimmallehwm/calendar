@@ -1,25 +1,30 @@
 import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { FaExclamation, FaTimes } from 'react-icons/fa'
+import Button from './Button'
 
 interface ModalProps {
     open: boolean
+    cancel: any
     confirm?: any
-    cancel?: any
     title?: string
     color?: string
     footerBtns?: boolean
     children?: any
+    showOverlay?: boolean
+    overlay?: any
 }
 
 const Modal = ({
     open,
-    confirm,
     cancel,
+    confirm,
     title,
-    color = 'primary', //'indigo'
+    color = 'blue', //indigo
     footerBtns,
-    children
+    children,
+    showOverlay,
+    overlay
 }: ModalProps) => {
     const cancelButtonRef = useRef(null)
     return (
@@ -60,13 +65,20 @@ const Modal = ({
                                         </h4>
                                     ) : null
                                 }
-                                <button className='bg-slate-100 p-2 rounded-full shadow-sm hover:shadow-xl'>
-                                    <FaTimes className='cursor-pointer' onClick={cancel} />
-                                </button>
+                                <Button onClick={cancel} color='primary' outline rounded>
+                                    <FaTimes className='cursor-pointer' />
+                                </Button>
                             </div>
                             <hr />
-                            <div className="bg-white h-[70vh] overflow-y-auto px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                {children}
+                            <div className='p-0 relative'>
+                                {showOverlay && (
+                                    <div  className='absolute top-0 left-0 w-full h-full z-20 flex items-center justify-center bg-black opacity-50'>
+                                        {overlay}
+                                    </div>
+                                ) }
+                                <div className="bg-white max-h-96 overflow-y-auto px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    {children}
+                                </div>
                             </div>
                             {
                                 footerBtns ? (

@@ -1,14 +1,14 @@
 import React, { useReducer } from 'react';
-import { Settings } from '../../shared/types';
+import { Settings } from '@shared/types';
 import { SettingsContext } from './SettingsContext';
+import storageService from '@shared/services/storage.service';
 
-const initState = {
+const initState: any = {
     settings: null
 }
 
-const dataexists = localStorage.getItem('settings');
-if(dataexists){
-    const settings = JSON.parse(dataexists);
+const settings = storageService.getSettings();
+if(settings){
     initState.settings = settings;
 }
 
@@ -27,11 +27,11 @@ function settingsReducer(state: any, action: any){
 export const SettingsProvider = (props?: any) => {
     const [state, dispatch] = useReducer(settingsReducer, initState);
 
-    const setSettings = (SettingsData: Settings | null) => {
-        localStorage.setItem('settings', JSON.stringify(SettingsData))
+    const setSettings = (settingsData: Settings | null) => {
+        storageService.setSettings(settingsData!)
         dispatch({
             type: 'SETSETTINGS',
-            payload: SettingsData
+            payload: settingsData
         })
     }
 

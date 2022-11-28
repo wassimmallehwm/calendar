@@ -35,7 +35,7 @@ const useHttpClient = (httpPromise: Promise<AxiosResponse<unknown, any>>) => {
                 }
             }
         })();
-    }, [])
+    }, [httpPromise])
 
     return { response, error };
 }

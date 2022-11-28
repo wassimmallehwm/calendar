@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorData } from '../../shared/types';
+import { ErrorData } from '@shared/types';
 
 export interface ErrorContextInterface {
   error: ErrorData | null;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings } from '../../shared/types';
+import { Settings } from '@shared/types';
 
 export interface SettingsContextInterface {
   settings: Settings | null;

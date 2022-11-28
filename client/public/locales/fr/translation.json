@@ -1,0 +1,42 @@
+{
+    "publish" : "Publier",
+    "rent" : "Louer",
+    "buy" : "Acheter",
+    "find" : "Trouver",
+    "next" :"Suivant",
+    "prev" :"Précédent",
+    "save" :"Enregistrer",
+    "menu" : {
+        "home": "Accueil",
+        "about": "À propos de nous",
+        "contact": "Contact",
+        "products": "Produits"
+    },
+    "titles" : {
+        "accounts": "Comptes",
+        "properties": "Biens",
+        "categories": "Catégories",
+        "equipments": "Équipments",
+        "settings": "Configuration",
+        "calendar" : "Calendrier",
+        "rent" : "Louer",
+        "buy" : "Acheter"
+    },
+    "form" : {
+        "subject": "Sujet",
+        "email": "Email",
+        "message": "Message",
+        "send" : "Envoyer"
+    },
+    "datagrid" : {
+        "itemsPerPage" : "Élements par page"
+    },
+    "success" : {
+        "save" : "Élement enregistré avec succés",
+        "delete" : "Élement supprimé avec succés"
+    },
+    "error" : {
+        "save" : "Erreur lors de l'enregistrement",
+        "delete" : "Erreur lors de la suppression"
+    }
+}

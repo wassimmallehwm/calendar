@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { ErrorData } from '../../shared/types';
+import { ErrorData } from '@shared/types';
 import { ErrorContext } from './ErrorContext';
 
 const initState = {

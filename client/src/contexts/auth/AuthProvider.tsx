@@ -1,14 +1,14 @@
 import React, { useReducer } from 'react';
-import { AuthResponse } from '../../shared/types';
+import { AuthResponse } from '@shared/types';
 import { AuthContext } from './AuthContext';
+import storageService from '@shared/services/storage.service';
 
-const initState = {
+const initState: any = {
     user: null
 }
 
-const dataexists = localStorage.getItem('userData');
-if(dataexists){
-    const userData = JSON.parse(dataexists);
+const userData = storageService.getUserData();
+if(userData){
     initState.user = userData;
 }
 
@@ -34,7 +34,7 @@ export const AuthProvider = (props?: any) => {
     const [state, dispatch] = useReducer(authReducer, initState);
 
     const login = (userData: AuthResponse) => {
-        localStorage.setItem('userData', JSON.stringify(userData))
+        storageService.setUserData(userData)
         dispatch({
             type: 'LOGIN',
             payload: userData
@@ -42,7 +42,7 @@ export const AuthProvider = (props?: any) => {
     }
 
     const logout = () => {
-        localStorage.removeItem('userData');
+        storageService.clearUserData()
         dispatch({type: 'LOGOUT'})
     }
     return(
