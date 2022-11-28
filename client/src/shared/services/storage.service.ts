@@ -20,8 +20,12 @@ class StorageService {
         localStorage.setItem(this._USER_DATA, JSON.stringify(userData))
     }
 
-    getUserData(): AuthResponse{
-        return JSON.parse(localStorage.getItem(this._USER_DATA) || '')
+    getUserData(): AuthResponse | null{
+        const data = localStorage.getItem(this._USER_DATA)
+        if(data){
+            return JSON.parse(data)
+        }
+        return null
     }
 
     clearUserData(){
@@ -32,8 +36,12 @@ class StorageService {
         localStorage.setItem(this._SETTINGS, JSON.stringify(userData))
     }
 
-    getSettings(): Settings{
-        return JSON.parse(localStorage.getItem(this._SETTINGS) || '')
+    getSettings(): Settings | null{
+        const data = localStorage.getItem(this._SETTINGS)
+        if(data){
+            return JSON.parse(data)
+        }
+        return null
     }
 
     clearSettings(){

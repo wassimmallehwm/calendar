@@ -22,7 +22,7 @@ const Sidebar = ({
   const { t } = useTranslation();
 
   const initMenus = () => {
-    const role = user ? user?.role.label : "GUEST"
+    const role = user ? user?.role?.label : "GUEST"
     const result = Config.getMenu().filter((menu: any) => menu.roles.find((elem: string) => elem == role) != undefined)
     return result
   }

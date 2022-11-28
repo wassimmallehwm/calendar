@@ -16,8 +16,6 @@ export class Config {
         apiUrl: `http://${this.host}:${this.port}/api/`,
         publicUrl: `http://${this.host}:${this.port}/public/`,
         socketUrl: `ws://${this.host}:${this.port}`,
-        // apiUrl: "http://192.168.1.19:3030/api/",
-        // publicUrl: "http://192.168.1.19:3030/public/"
     };
 
     public static getConfig(){
