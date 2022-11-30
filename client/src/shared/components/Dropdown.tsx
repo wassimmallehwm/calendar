@@ -19,7 +19,7 @@ const Dropdown = ({
     return (
         <Menu as="div" className="ml-3 relative">
             <div>
-                <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-slate-50">
+                <Menu.Button className="max-w-xs rounded-full flex items-center text-sm focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-slate-50">
                     <span className="sr-only">Open dropdown</span>
                     {trigger}
                 </Menu.Button>
