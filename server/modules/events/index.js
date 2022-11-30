@@ -1,5 +1,5 @@
-const eventRoutes = require('./event.routes')
+const routes = require('./event.routes')
 
 module.exports = {
-    routes: eventRoutes,
+    routes,
 }
