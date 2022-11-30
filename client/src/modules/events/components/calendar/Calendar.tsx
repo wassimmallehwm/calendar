@@ -11,8 +11,10 @@ import { EventsService } from '../../services/events.service';
 import { Event, formatCalendarToEvent, initEvent } from '../../models/event.model';
 import { showToast } from '@utils/toast';
 import { formatDateToInput } from '@utils/dateFormat';
-import { Button } from '@shared/components';
+import { Button, Dropdown } from '@shared/components';
 import { BsChevronDoubleLeft, BsChevronDoubleRight, BsChevronLeft, BsChevronRight } from 'react-icons/bs'
+import { FaEllipsisV, FaPlus, FaRegCalendarAlt } from 'react-icons/fa';
+import { DropdownItem } from '@shared/types';
 
 
 function createDateAsUTC(date: any) {
@@ -96,12 +98,6 @@ const Calendar = () => {
       getEventsByRange()
     }
   }, [activeDate])
-
-  const views = [
-    {value: 'dayGridMonth', label: 'month'},
-    {value: 'timeGridWeek', label: 'week'},
-    {value: 'timeGridDay', label: 'day'}
-  ]
 
 
   const options: CalendarOptions = {
@@ -196,25 +192,45 @@ const Calendar = () => {
     updateActiveDate()
   }
 
+  const views: DropdownItem[] = [
+    { action: () => changeViewType('dayGridMonth'), key: 'dayGridMonth', label: 'month' },
+    { action: () => changeViewType('timeGridWeek'), key: 'timeGridWeek', label: 'week' },
+    { action: () => changeViewType('timeGridDay'), key: 'timeGridDay', label: 'day' }
+  ]
+
   return (
     <div id="main-container" style={{ padding: '1rem' }}>
 
-      <div className='flex justify-between'>
+      <div className='flex items-center justify-between'>
         <div className='flex items-center gap-2'>
           <Button small margin={false} color='primary'
-            onClick={openAddEventModal}>
-            New event
+            onClick={openAddEventModal} title={'New event'}>
+            <span className='block md:hidden'>
+              <FaPlus size="14" />
+            </span>
+            <span className='hidden md:block'>
+              New event
+            </span>
           </Button>
           <Button small margin={false} color='primary' outline
-            onClick={() => today()}>
-            Today
+            onClick={() => today()} title={'Today'}>
+
+            <span className='block md:hidden'>
+              <FaRegCalendarAlt size="14" />
+            </span>
+            <span className='hidden md:block'>
+              Today
+            </span>
           </Button>
         </div>
+
         <h2 className='flex items-center gap-2'>
-          <Button small margin={false} color='primary' outline
-            onClick={() => prevYear()}>
-            <BsChevronDoubleLeft size="16" />
-          </Button>
+          <div className='hidden md:block'>
+            <Button small margin={false} color='primary' outline
+              onClick={() => prevYear()}>
+              <BsChevronDoubleLeft size="16" />
+            </Button>
+          </div>
           <Button small margin={false} color='primary' outline
             onClick={() => prev()}>
             <BsChevronLeft size="16" />
@@ -226,22 +242,32 @@ const Calendar = () => {
             onClick={() => next()}>
             <BsChevronRight size="16" />
           </Button>
-          <Button small margin={false} color='primary' outline
-            onClick={() => nextYear()}>
-            <BsChevronDoubleRight size="16" />
-          </Button>
+          <div className='hidden md:block'>
+            <Button small margin={false} color='primary' outline
+              onClick={() => nextYear()}>
+              <BsChevronDoubleRight size="16" />
+            </Button>
+          </div>
 
         </h2>
-        <div className='flex items-center gap-2'>
+
+        <div className='hidden md:flex items-center gap-2'>
           {
-            views.map(({value, label}: any) => (
-              <Button key={value} margin={false} color='primary' 
-                outline={value !== currentView} small
-                onClick={() => changeViewType(value)}>
+            views.map(({ key, action, label }: any) => (
+              <Button key={key} margin={false} color='primary'
+                outline={key !== currentView} small
+                onClick={action}>
                 {label}
               </Button>
             ))
           }
+        </div>
+        <div className='block md:hidden'>
+          <Dropdown trigger={
+            <Button asDiv margin={false} color='primary' outline rounded>
+              <FaEllipsisV size="14" />
+            </Button>
+          } items={views} />
         </div>
       </div>
 
