@@ -11,6 +11,7 @@ import NoData from "./NoData";
 import PageTitle from "./PageTitle";
 import ProgressBar from "./ProgressBar";
 import Spinner from "./Spinner";
+import Dropdown from "./Dropdown";
 
 export {
   Loader,
@@ -25,5 +26,6 @@ export {
   PageTitle,
   ProgressBar,
   NoData,
-  DynamicIcon
+  DynamicIcon,
+  Dropdown
 };

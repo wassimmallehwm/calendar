@@ -9,10 +9,10 @@ import toast from 'react-hot-toast'
 import { userImage } from '@utils/filePath'
 import { useTranslation } from 'react-i18next'
 import { Config } from '@config/Config'
+import { Dropdown } from '@shared/components'
+import { DropdownItem } from '@shared/types'
 
-function classNames(...classes: any[]) {
-    return classes.filter(Boolean).join(' ')
-}
+
 
 interface NavbarProps {
     toggleSidebar: any
@@ -29,17 +29,18 @@ const Navbar = ({
         const role = user ? user?.role?.label : "GUEST"
         const result = Config.getMenu().filter((menu: any) => menu.roles.find((elem: string) => elem == role) != undefined)
         return result
-      }
+    }
 
     const onLogout = () => {
         logout()
         navigate('/')
     }
 
-    const userNavigation = [
-        // { name: 'Your Profile', click: onLogout },
-        // { name: 'Settings', click: onLogout },
-        { name: 'Sign out', click: onLogout },
+    const dropdownItems: DropdownItem[] = [
+        {
+            label: 'Sign out',
+            action: onLogout
+        }
     ]
     return (
         <header className="bg-slate-50 shadow-md h-16 flex items-center justify-center w-full border-b-2 border-b-gray-200">
@@ -60,7 +61,7 @@ const Navbar = ({
                     {
                         initMenus().map((menu: any) => (
                             <NavLink className="h-full"
-                            key={menu.label} to={menu.url}>
+                                key={menu.label} to={menu.url}>
                                 <li className="px-2 h-full cursor-pointer rounded-sm flex items-center justify-between hover:bg-gray-200">
                                     <span className="mx-4"> {t(`titles.${menu.label}`)} </span>
                                 </li>
@@ -69,7 +70,12 @@ const Navbar = ({
                     }
                 </ul>
                 <div className='flex items-center gap-4'>
-                    <Menu as="div" className="ml-3 relative">
+                    <Dropdown trigger={(
+                        <img className="h-8 w-8 rounded-full" src={userImage("user_default")} alt="user" />
+                    )}
+                        items={dropdownItems}
+                    />
+                    {/* <Menu as="div" className="ml-3 relative">
                         <div>
                             <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-slate-50">
                                 <span className="sr-only">Open user menu</span>
@@ -103,7 +109,7 @@ const Navbar = ({
                                 ))}
                             </Menu.Items>
                         </Transition>
-                    </Menu>
+                    </Menu> */}
                     {/* <button className="p-1 flex items-center text-slate-50"
                         onClick={onLogout}
                         title="Sign out"
