@@ -40,19 +40,23 @@ module.exports = {
   safelist: [
     {
       pattern: /bg-(primary|success|secondary|slate)-(50|100|200|300|400|500|600)/,
-      variants: ['lg', 'hover', 'focus', 'lg:hover'],
+      variants: ['sm', 'md', 'lg', 'hover', 'focus', 'lg:hover'],
     },
     {
       pattern: /text-(primary|success|secondary|slate)-(50|100|200|300|400|500|600)/,
-      variants: ['lg', 'hover', 'focus', 'lg:hover'],
+      variants: ['sm', 'md', 'lg', 'hover', 'focus', 'lg:hover'],
     },
     {
       pattern: /border-(primary|success|secondary|slate)-(50|100|200|300|400|500|600)/,
-      variants: ['lg', 'hover', 'focus', 'lg:hover'],
+      variants: ['sm', 'md', 'lg', 'hover', 'focus', 'lg:hover'],
+    },
+    {
+      pattern: /ring-(primary|success|secondary|slate)-(50|100|200|300|400|500|600)/,
+      variants: ['sm', 'md', 'lg', 'hover', 'focus', 'lg:hover'],
     },
     {
       pattern: /opacity-(50|60|70|80|90)/,
-      variants: ['lg', 'hover', 'focus', 'lg:hover'],
+      variants: ['sm', 'md', 'lg', 'hover', 'focus', 'lg:hover'],
     },
   ],
   variants: {
