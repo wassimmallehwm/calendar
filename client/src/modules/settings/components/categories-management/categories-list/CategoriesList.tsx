@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { ErrorContext } from 'src/contexts';
-import { Category } from '@modules/settings/models/Category';
+import { Category, EmptyCategory } from '@modules/settings/models/Category';
 import categoriesService from '@modules/settings/services/categories.service';
 import { Button, Confirmation, DataGrid, Loader, Modal, PageTitle } from '@shared/components';
 import { httpErrorHandler, showLoading, showToast } from 'src/utils';
@@ -86,7 +86,7 @@ const CategoriesList = () => {
         }
     }
 
-    const openAddModal = (data?: Category) => {
+    const openAddModal = (data: Category = EmptyCategory) => {
         setAddModal(true)
         data && setCategory(data)
     }
@@ -117,6 +117,12 @@ const CategoriesList = () => {
         </Modal>
     );
 
+    const colorRender = (data: any) => (
+        <div className='h-8 w-8 rounded-full flex items-center justify-center' style={{backgroundColor: data.backgroundColor}}>
+            <span className='uppercase' style={{color: data.textColor}}> {data.label[0]} </span>
+        </div>
+    )
+
     const actionRender = (data: any) => (
         <>
             <Button rounded title="Edit" onClick={() => openAddModal(data)} color="primary">
@@ -130,6 +136,7 @@ const CategoriesList = () => {
 
     const primeColumns = [
         { field: 'label', header: 'Label', filter: true, sortable: true },
+        { field: 'color', header: 'Color', body: colorRender},
         { field: 'createdAt', header: 'Created at', body: (data: any) => formateDate(data.createdAt), sortable: true },
         { field: '_id', header: 'Action', body: actionRender }
     ];

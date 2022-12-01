@@ -21,15 +21,15 @@ class CategoryService {
         return this.instance
     }
 
-    create = async (label) => {
+    create = async (data) => {
         try {
-            if (!label || label.trim().length == 0)
+            if (!data.label || data.label.trim().length == 0)
                 return new ResponseError({
                     status: 400,
                     message: `Unvalid Category label !`
                 })
 
-            const category = new Category({ label });
+            const category = new Category(data);
 
             const result = await category.save();
             if (result) {

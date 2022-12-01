@@ -10,13 +10,13 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         required: false,
         unique: false,
-        default: "#000000",
+        default: "#ffffff",
     },
     backgroundColor: {
         type: String,
         required: false,
         unique: false,
-        default: "#81c7e5",
+        default: "#025174",
     }
     
 }, {

@@ -3,13 +3,12 @@ const CategoryService = require("./category.service");
       
 module.exports.create = async(req, res) => {
   try {
-    const { label } = req.body;
     const {
       success,
       status,
       content,
       message
-    } = await CategoryService.create(label)
+    } = await CategoryService.create(req.body)
     res.status(status).json(success ? content : { message });
   } catch (err) {
     const { status, message } = ErrorsHandler.handle(err, "CategoryController:create")
