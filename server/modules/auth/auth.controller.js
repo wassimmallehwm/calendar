@@ -28,14 +28,14 @@ module.exports.refresh_token = async (req, res) => {
   try {
     const { success, status, content, message } = await AuthService.refresh_token(req.user._id)
     res.status(status)
-    // .cookie('access_token', content.access_token, { 
-    //   maxAge: JwtService.expiration(content.access_token),
-    //   httpOnly: true 
-    // })
-    // .cookie('refresh_token', content.refresh_token, { 
-    //   maxAge: JwtService.expiration(content.refresh_token),
-    //   httpOnly: false 
-    // })
+    .cookie('access_token', content.access_token, { 
+      maxAge: JwtService.expiration(content.access_token),
+      httpOnly: true 
+    })
+    .cookie('refresh_token', content.refresh_token, { 
+      maxAge: JwtService.expiration(content.refresh_token),
+      httpOnly: false 
+    })
     .json(success ? content : { message });
   } catch (err) {
     const { status, message } = ErrorsHandler.handle(err, "AuthController:refresh_token")
