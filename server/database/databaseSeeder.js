@@ -1,9 +1,18 @@
 const fs = require('fs');
 const path = require('path');
+const { CategoryService } = require('../modules/categories');
 
 const { RoleService } = require("../modules/roles");
 const { AppConfigService } = require('../modules/settings');
 const { UserService } = require("../modules/users");
+
+const createDefaultCategory = async () => {
+    await CategoryService.create({
+        label: "Default",
+        backgroundColor: "#025174",
+        textColor: "#ffffff"
+    })
+}
 
 
 const createCollections = async () => {
@@ -20,6 +29,7 @@ const createCollections = async () => {
         }
         await UserService.create(admin)
     }
+    await createDefaultCategory()
 }
 
 const initializeApp = async () => {
