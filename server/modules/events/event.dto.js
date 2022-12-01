@@ -13,8 +13,7 @@ module.exports = class EventDto {
         _id,
         title,
         description,
-        backgroundColor,
-        textColor,
+        category,
         startDate,
         startTime,
         endDate,
@@ -26,8 +25,9 @@ module.exports = class EventDto {
         this.id = _id;
         this.title = title
         this.description = description
-        this.backgroundColor = backgroundColor
-        this.textColor = textColor
+        this.category = category
+        this.backgroundColor = category.backgroundColor
+        this.textColor = category.textColor
         // this.startDate = startDate
         // this.startTime = startTime
         // this.endDate = endDate

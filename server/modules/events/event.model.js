@@ -32,17 +32,10 @@ const EventSchema = new mongoose.Schema({
         required: false,
         unique: false,
     },
-    textColor: {
-        type: String,
-        required: false,
-        unique: false,
-        default: "#000000",
-    },
-    backgroundColor: {
-        type: String,
-        required: false,
-        unique: false,
-        default: "#81c7e5",
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Category",
     },
     eventUrl: {
         type: String,

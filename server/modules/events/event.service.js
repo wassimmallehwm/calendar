@@ -44,7 +44,8 @@ class EventsService {
     findById = async (id) => {
         try {
             const result = await Event.findById(id)
-                .populate({ path: 'createdBy', model: 'User' });
+                .populate({ path: 'createdBy', model: 'User' })
+                .populate({ path: 'category', model: 'Category' });
             if (!result) {
                 return new ResponseError({
                     status: 404,
@@ -66,7 +67,8 @@ class EventsService {
     findAll = async (query = {}) => {
         try {
             let result = await Event.find(query)
-                .populate({ path: 'createdBy', model: 'User' });
+                .populate({ path: 'createdBy', model: 'User' })
+                .populate({ path: 'category', model: 'Category' });
             if (result) {
                 result = result.map(elem => new EventDto(elem))
                 return new ResponseSuccess({
@@ -87,7 +89,8 @@ class EventsService {
                 startDate: { $gte: start },
                 endDate: { $lte: end }
             })
-                .populate({ path: 'createdBy', model: 'User' });
+            .populate({ path: 'createdBy', model: 'User' })
+            .populate({ path: 'category', model: 'Category' });
             if (result) {
                 result = result.map(elem => new EventDto(elem))
                 return new ResponseSuccess({
@@ -121,6 +124,7 @@ class EventsService {
                 .limit(limit)
                 .sort({ [sortField]: sortOrder })
                 .populate({ path: 'createdBy', model: 'User' })
+                .populate({ path: 'category', model: 'Category' })
                 .exec();
 
             if (result) {
@@ -152,7 +156,9 @@ class EventsService {
                     message: "Event not found !"
                 })
             let result = await Event.findOneAndUpdate({ _id: id }, data, { new: true });
-            result = await result.populate({ path: 'createdBy', model: 'User' });
+            result = await result
+            .populate({ path: 'createdBy', model: 'User' })
+            .populate({ path: 'category', model: 'Category' });
 
             return new ResponseSuccess({
                 status: 200,
