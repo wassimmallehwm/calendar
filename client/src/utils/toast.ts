@@ -19,6 +19,16 @@ export const showNotif = (element: any) => {
       ))
 }
 
+export const toastError = (text: string | Element) => {
+    toast.dismiss()
+    toast.error(text.toString(), toastOptions);
+}
+
+export const toastSuccess = (text: string | Element) => {
+    toast.dismiss()
+    toast.success(text.toString(), toastOptions);
+}
+
 export const showToast = (type: string, text: string | Element) => {
     toast.dismiss()
     switch (type) {

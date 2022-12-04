@@ -29,6 +29,10 @@ class SettingsService extends BaseService {
         return this.httpClient(this.httpUrl(''), 'PUT', data);
     }
 
+    updateLogo(data: FormData){
+        return this.httpClient<Settings>(this.httpUrl('logo'), 'PUT', data);
+    }
+
 }
 
 export default SettingsService.getInstance();

@@ -40,7 +40,7 @@ module.exports.uploadLogo = async (req, res) => {
             status,
             content,
             message
-        } = await AppConfigService.updateLogo(req.file);
+        } = await AppConfigService.updateLogo(req.file.filename);
         res.status(status).json(success ? content : { message });
     } catch (err) {
         console.log(err)

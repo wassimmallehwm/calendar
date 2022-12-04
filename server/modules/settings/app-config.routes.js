@@ -9,6 +9,12 @@ router.put('/', update);
 
 router.get('/logo', logo);
 
-router.post('/logo', authenticated, admin, FilesHandler.upload('images').single('logo'), uploadLogo);
+router.put(
+    '/logo',
+    authenticated,
+    admin,
+    FilesHandler.upload('images').single('logo'),
+    uploadLogo
+);
 
 module.exports = router;
