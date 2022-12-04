@@ -1,9 +1,11 @@
-import { ChangeEvent } from 'react'
+import { categoriesService } from '@modules/settings';
+import { Category } from '@modules/settings/models';
+import { ChangeEvent, useEffect, useState } from 'react'
 import { Modal } from '../../../../shared/components';
-import { Input } from '../../../../shared/components/form';
+import { AutoComplete, Input, Select } from '../../../../shared/components/form';
 import { Event } from '../../models/event.model';
 
-interface EventsModalProps{
+interface EventsModalProps {
     open: boolean
     close: any
     save: any
@@ -19,6 +21,18 @@ const EventsModal = ({
     setEvent
 }: EventsModalProps) => {
 
+    const [categories, setCategories] = useState<Category[]>([])
+
+    const getCategories = () => {
+        categoriesService.findAll()
+            .then(res => setCategories(res))
+            .catch(error => console.error(error))
+    }
+
+    useEffect(() => {
+        getCategories()
+    }, [])
+
     const {
         title,
         description,
@@ -26,12 +40,11 @@ const EventsModal = ({
         startTime,
         endDate,
         endTime,
-        textColor,
-        backgroundColor,
+        category,
         eventUrl
     } = event
 
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChange = (e: ChangeEvent<any>) => {
         setEvent({ ...event, [e.target.name]: e.target.value })
     }
 
@@ -114,33 +127,31 @@ const EventsModal = ({
                 </div>
                 <div className='flex items-center justify-between gap-4'>
                     <div className='w-full'>
-                        <label>Background color</label>
-                        <Input
-                            type="color"
-                            name="backgroundColor"
-                            value={backgroundColor}
-                            onChange={onChange}
-                        />
+                        <label>Category</label>
+                        <Select name='category' onChange={onChange} value={category!}>
+                            {
+                                categories.map(cat => (
+                                    <option key={cat._id} value={cat._id}>
+                                        <div className='flex items-center gap-4'>
+                                            <div className='h-8 w-8 rounded-full' style={{ backgroundColor: cat.backgroundColor }}>
+                                                {/* <span className='uppercase' style={{ color: cat.textColor }}> {cat.label![0]} </span> */}
+                                            </div>
+                                            <span style={{ color: cat.textColor }}>{cat.label}</span>
+                                        </div>
+                                    </option>
+                                ))
+                            }
+                        </Select>
                     </div>
                     <div className='w-full'>
-                        <label>Text color</label>
+                        <label>Event url</label>
                         <Input
-                            type="color"
-                            name="textColor"
-                            value={textColor}
+                            type="url"
+                            name="eventUrl"
+                            value={eventUrl}
                             onChange={onChange}
                         />
                     </div>
-                </div>
-
-                <div>
-                    <label>Event url</label>
-                    <Input
-                        type="url"
-                        name="eventUrl"
-                        value={eventUrl}
-                        onChange={onChange}
-                    />
                 </div>
 
             </form>

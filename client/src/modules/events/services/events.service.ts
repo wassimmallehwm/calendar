@@ -14,7 +14,7 @@ export class EventsService extends BaseService {
     
     createOrUpdate(data: Event){
         const method = data.id === '' ? "POST" : "PUT"
-        const url = data.id === '' ? '' : `/${data.id}`
+        const url = data.id === '' ? '' : data.id
         return this.httpClient(this.httpUrl(url), method, data);
     }
 

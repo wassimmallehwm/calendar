@@ -8,12 +8,13 @@ export type Event = {
     startTime: string,
     endDate: string,
     endTime: string,
-    textColor: string,
-    backgroundColor: string,
+    category: string,
+    textColor?: string,
+    backgroundColor?: string,
     eventUrl?: string
 }
 
-export const initEvent = {
+export const initEvent: Event = {
     id: '',
     title: '',
     description: '',
@@ -21,8 +22,7 @@ export const initEvent = {
     startTime: '',
     endDate: '',
     endTime: '',
-    textColor: '#000000',
-    backgroundColor: '#000000',
+    category: '',
     eventUrl: ''
 }
 
@@ -33,6 +33,7 @@ export const formatCalendarToEvent = (data: any) => {
         id: data.id,
         title: data.title,
         description: data.extendedProps.description,
+        category: data.extendedProps.category,
         startDate: formatDateToInput(startDate),
         startTime: getHours(startDate) + ":" + getMinutes(startDate),
         endDate: formatDateToInput(endDate),

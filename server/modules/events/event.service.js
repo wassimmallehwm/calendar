@@ -28,7 +28,11 @@ class EventsService {
     create = async (data) => {
         try {
             const event = new Event(data)
-            const result = await event.save();
+            let result = await event.save();
+            result = await result.populate([
+                { path: 'createdBy', model: 'User' },
+                { path: 'category', model: 'Category' }
+            ])
             return new ResponseSuccess({
                 status: 200,
                 content: new EventDto(result)
@@ -156,9 +160,12 @@ class EventsService {
                     message: "Event not found !"
                 })
             let result = await Event.findOneAndUpdate({ _id: id }, data, { new: true });
+            
             result = await result
-            .populate({ path: 'createdBy', model: 'User' })
-            .populate({ path: 'category', model: 'Category' });
+            .populate([
+                { path: 'createdBy', model: 'User' },
+                { path: 'category', model: 'Category' }
+            ])
 
             return new ResponseSuccess({
                 status: 200,
