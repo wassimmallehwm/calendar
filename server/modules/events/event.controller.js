@@ -1,4 +1,5 @@
 const { ErrorsHandler } = require("../../utils");
+const categoryService = require("../categories/category.service");
 const EventsService = require("./event.service");
 
 const SERVICE_NAME = "EventsController"
@@ -8,6 +9,11 @@ module.exports.create = async (req, res) => {
   try {
     let item = req.body;
     item.createdBy = req.user
+    if (!item.category || item.category == "") {
+      const defaultCategoryResponse = await categoryService.findDefault()
+      if (defaultCategoryResponse.success)
+        item.category = defaultCategoryResponse.content._id
+    }
     const {
       success,
       status,

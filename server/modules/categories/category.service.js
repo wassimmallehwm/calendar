@@ -141,6 +141,25 @@ class CategoryService {
         }
     }
 
+    findDefault = async () => {
+        try {
+            const result = await Category.findOne({ label: 'Default' });
+            if (!result) {
+                return new ResponseError({
+                    status: 404,
+                    message: `Category "${label}" not found !`
+                })
+            }
+            return new ResponseSuccess({
+                status: 200,
+                content: result
+            })
+
+        } catch (err) {
+            return new ResponseError(ErrorsHandler.handle(err, `${SERVICE_NAME}:findDefault`))
+        }
+    }
+
     update = async (id, data) => {
         try {
             const category = await Category.findById(id)

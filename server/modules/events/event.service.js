@@ -1,7 +1,5 @@
 const { ResponseSuccess, ResponseError } = require("../../shared/response");
 const { ErrorsHandler } = require("../../utils");
-const path = require('path');
-const { APP_NAME } = require("../../config");
 const Event = require("./event.model");
 const EventDto = require("./event.dto");
 

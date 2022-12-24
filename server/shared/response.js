@@ -2,9 +2,11 @@ class BaseResponse {
     constructor(
         success,
         status,
+        content
     ) {
         this.success = success;
         this.status = status;
+        this.content = content;
     }
 }
 
@@ -15,10 +17,9 @@ class ResponseSuccess extends BaseResponse {
         message = "",
         url = "",
     }) {
-        super(true, status)
+        super(true, status, content)
         this.message = message;
         this.url = url;
-        this.content = content;
     }
 }
 
@@ -30,7 +31,7 @@ class ResponseError extends BaseResponse {
         url = "",
         validationErrors = []
     }) {
-        super(false, status)
+        super(false, status, null)
         this.message = message;
         this.reason = reason;
         this.url = url;
