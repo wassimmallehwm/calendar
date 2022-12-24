@@ -88,8 +88,10 @@ class EventsService {
     findByRange = async (start, end) => {
         try {
             let result = await Event.find({
-                startDate: { $gte: start },
-                endDate: { $lte: end }
+                $or: [
+                    {startDate: { $gte: start }},
+                    {endDate: { $lte: end }}
+                ]
             })
             .populate({ path: 'createdBy', model: 'User' })
             .populate({ path: 'category', model: 'Category' });
