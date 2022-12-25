@@ -40,7 +40,7 @@ const Sidebar = ({
       </div>
       <Link to="/">
         <img src={appImage(settings?.logo!)} className="w-36 mx-auto text-center" />
-        <div className="text-xl font-bold text-gray-800 text-center">
+        <div className="my-2 text-xl font-bold text-gray-800 text-center">
           {settings?.name}
         </div>
       </Link>

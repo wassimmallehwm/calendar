@@ -29,7 +29,7 @@ class GroupService {
                     message: `Unvalid Group label !`
                 })
 
-            const Group = new Group(data);
+            const group = new Group(data);
 
             const result = await group.save();
             if (result) {

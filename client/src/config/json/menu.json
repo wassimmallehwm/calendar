@@ -10,6 +10,11 @@
         "roles": ["ADMIN"]
     },
     {
+        "label": "groups",
+        "url": "/settings/groups",
+        "roles": ["ADMIN"]
+    },
+    {
         "label": "categories",
         "url": "/settings/categories",
         "roles": ["ADMIN"]
