@@ -29,7 +29,8 @@ class EventsService {
             let result = await event.save();
             result = await result.populate([
                 { path: 'createdBy', model: 'User' },
-                { path: 'category', model: 'Category' }
+                { path: 'category', model: 'Category' },
+                { path: 'allowedViewers', model: 'Group' }
             ])
             return new ResponseSuccess({
                 status: 200,
@@ -47,7 +48,8 @@ class EventsService {
         try {
             const result = await Event.findById(id)
                 .populate({ path: 'createdBy', model: 'User' })
-                .populate({ path: 'category', model: 'Category' });
+                .populate({ path: 'category', model: 'Category' })
+                .populate({ path: 'allowedViewers', model: 'Group' });
             if (!result) {
                 return new ResponseError({
                     status: 404,
@@ -70,7 +72,8 @@ class EventsService {
         try {
             let result = await Event.find(query)
                 .populate({ path: 'createdBy', model: 'User' })
-                .populate({ path: 'category', model: 'Category' });
+                .populate({ path: 'category', model: 'Category' })
+                .populate({ path: 'allowedViewers', model: 'Group' });
             if (result) {
                 result = result.map(elem => new EventDto(elem))
                 return new ResponseSuccess({
@@ -94,7 +97,8 @@ class EventsService {
                 ]
             })
             .populate({ path: 'createdBy', model: 'User' })
-            .populate({ path: 'category', model: 'Category' });
+            .populate({ path: 'category', model: 'Category' })
+            .populate({ path: 'allowedViewers', model: 'Group' });
             if (result) {
                 result = result.map(elem => new EventDto(elem))
                 return new ResponseSuccess({
@@ -129,6 +133,7 @@ class EventsService {
                 .sort({ [sortField]: sortOrder })
                 .populate({ path: 'createdBy', model: 'User' })
                 .populate({ path: 'category', model: 'Category' })
+                .populate({ path: 'allowedViewers', model: 'Group' })
                 .exec();
 
             if (result) {
@@ -164,7 +169,8 @@ class EventsService {
             result = await result
             .populate([
                 { path: 'createdBy', model: 'User' },
-                { path: 'category', model: 'Category' }
+                { path: 'category', model: 'Category' },
+                { path: 'allowedViewers', model: 'Group' }
             ])
 
             return new ResponseSuccess({

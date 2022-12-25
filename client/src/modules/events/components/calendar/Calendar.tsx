@@ -48,6 +48,9 @@ const Calendar = () => {
   const onSaveEvent = async () => {
     try {
       setLoading(true)
+      if(event.allowedViewers && event.allowedViewers.length > 0){
+        event.allowedViewers.map(elem => elem._id)
+      }
       await eventsService.createOrUpdate(event);
       getEventsByRange()
       closeEventModal()

@@ -1,8 +1,9 @@
 import { categoriesService } from '@modules/settings';
-import { Category } from '@modules/settings/models';
+import { Category, Group } from '@modules/settings/models';
+import groupsService from '@modules/settings/services/groups.service';
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Modal } from '../../../../shared/components';
-import { AutoComplete, Input, Select } from '../../../../shared/components/form';
+import { Checkbox, Input, Select, MultipleSelect } from '../../../../shared/components/form';
 import { Event } from '../../models/event.model';
 
 interface EventsModalProps {
@@ -22,6 +23,7 @@ const EventsModal = ({
 }: EventsModalProps) => {
 
     const [categories, setCategories] = useState<Category[]>([])
+    const [groups, setGroups] = useState<Group[]>([])
 
     const getCategories = () => {
         categoriesService.findAll()
@@ -29,11 +31,19 @@ const EventsModal = ({
             .catch(error => console.error(error))
     }
 
+    const getGroups = () => {
+        groupsService.findAll()
+            .then(res => setGroups(res))
+            .catch(error => console.error(error))
+    }
+
     useEffect(() => {
         getCategories()
+        getGroups()
     }, [])
 
     const {
+        id,
         title,
         description,
         startDate,
@@ -41,14 +51,24 @@ const EventsModal = ({
         endDate,
         endTime,
         category,
-        eventUrl
+        eventUrl,
+        isPrivate,
+        allowedViewers
     } = event
 
     const onChange = (e: ChangeEvent<any>) => {
-        setEvent({ ...event, [e.target.name]: e.target.value })
+        if (e.target.name == 'isPrivate') {
+            setEvent((prev: Event) => ({ ...prev, [e.target.name]: !prev.isPrivate }))
+        } else {
+            setEvent({ ...event, [e.target.name]: e.target.value })
+        }
     }
 
-    const modalTitle = title && title !== "" ? title : "Create an event"
+    const onChangeViewers = (newValue: any[]) => {
+        setEvent({ ...event, allowedViewers: newValue })
+    }
+
+    const modalTitle = id && id !== "" ? title : "Create an event"
 
     return (
         <Modal
@@ -152,6 +172,33 @@ const EventsModal = ({
                             onChange={onChange}
                         />
                     </div>
+                </div>
+
+                <div className='flex items-center justify-between gap-4'>
+                    <div className='w-full'>
+                        <Checkbox checked={isPrivate!} label="Private" name="isPrivate" onChange={onChange} />
+                    </div>
+
+                    {
+                        isPrivate ? (
+                            <div className='w-full'>
+                                <label>Groups</label>
+                                <MultipleSelect
+                                    isLoading={false}
+                                    id="multiselect-groups"
+                                    placeholder="Groups"
+                                    options={groups.map(elem => {
+                                        elem.value = elem._id
+                                        return elem
+                                    })}
+                                    labelKey={(option: any) => `${option.label}`}
+                                    renderMenuItemChildren={(option: any) => <span>{option.label}</span>}
+                                    onChange={onChangeViewers}
+                                    selected={allowedViewers}
+                                />
+                            </div>
+                        ) : null
+                    }
                 </div>
 
             </form>

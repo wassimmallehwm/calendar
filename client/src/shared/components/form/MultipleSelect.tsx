@@ -1,5 +1,6 @@
 import React from 'react'
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import Select from 'react-select'
 
 const MultipleSelect = ({
     isLoading,
@@ -14,19 +15,17 @@ const MultipleSelect = ({
     filterBy = () => true
 }: any) => {
     return (
-        <AsyncTypeahead
-            className='w-full rounded mt-1 outline-hidden focus:border-primary-300 focus:outline-none focus:ring-1'
-            multiple
-            selected={selected}
-            onChange={onChange}
-            filterBy={filterBy}
-            id={id}
+        <Select
+            value={selected}
+            isMulti
             isLoading={isLoading}
-            labelKey={labelKey}
-            onSearch={onInputChange}
+            isClearable={true}
+            name={placeholder}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            getOptionLabel={labelKey}
+            onChange={onChange}
             options={options}
-            placeholder={placeholder}
-            renderMenuItemChildren={renderMenuItemChildren}
         />
     )
 }

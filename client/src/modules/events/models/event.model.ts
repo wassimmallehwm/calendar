@@ -11,7 +11,9 @@ export type Event = {
     category: string,
     textColor?: string,
     backgroundColor?: string,
-    eventUrl?: string
+    eventUrl?: string,
+    isPrivate?: boolean,
+    allowedViewers?: any[]
 }
 
 export const initEvent: Event = {
@@ -23,7 +25,9 @@ export const initEvent: Event = {
     endDate: '',
     endTime: '',
     category: '',
-    eventUrl: ''
+    eventUrl: '',
+    isPrivate: false,
+    allowedViewers: []
 }
 
 export const formatCalendarToEvent = (data: any) => {
@@ -40,7 +44,9 @@ export const formatCalendarToEvent = (data: any) => {
         endTime: getHours(endDate) + ":" + getMinutes(endDate),
         textColor: data.textColor,
         backgroundColor: data.backgroundColor,
-        eventUrl: data.extendedProps.eventUrl
+        eventUrl: data.extendedProps.eventUrl,
+        isPrivate: data.extendedProps.isPrivate,
+        allowedViewers: data.extendedProps.allowedViewers
     }
     return result
 }

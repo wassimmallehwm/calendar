@@ -19,6 +19,8 @@ module.exports = class EventDto {
         endDate,
         endTime,
         eventUrl,
+        isPrivate,
+        allowedViewers,
         createdBy,
         createdAt
     }) {
@@ -35,6 +37,8 @@ module.exports = class EventDto {
         this.start = formatEventDate(startDate, startTime);
         this.end = formatEventDate(endDate, endTime);
         this.eventUrl = eventUrl
+        this.isPrivate = isPrivate ? isPrivate : false
+        this.allowedViewers = allowedViewers
         this.createdBy = createdBy ? new UserDto(createdBy) : null
         this.createdAt = createdAt
     }

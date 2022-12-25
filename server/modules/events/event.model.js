@@ -55,12 +55,16 @@ const EventSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    allowedMaintainers: {
-        type: [Object],
+    allowedEditors: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true,
+        ref: "Group",
         default: []
     },
-    allowedView: {
-        type: [Object],
+    allowedViewers: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: true,
+        ref: "Group",
         default: []
     }
 }, {
