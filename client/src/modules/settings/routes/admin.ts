@@ -1,11 +1,11 @@
 import { lazy } from 'react';
 import { Route } from 'src/shared/types';
-const Settings = lazy(() => import('../components/settings-management/Settings'));
+const AppSettings = lazy(() => import('../components/settings-management/AppSettings'));
 
 const settingsRoutes: Route[] = [
     {
         path: "/admin",
-        component: Settings,
+        component: AppSettings,
         status: 'PROTECTED',
         roles: ["ADMIN"]
     }

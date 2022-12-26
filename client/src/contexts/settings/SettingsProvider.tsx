@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { Settings } from '@shared/types';
 import { SettingsContext } from './SettingsContext';
 import storageService from '@shared/services/storage.service';
+import { appImage } from '@utils/filePath';
 
 const initState: any = {
     settings: null
@@ -28,6 +29,8 @@ export const SettingsProvider = (props?: any) => {
     const [state, dispatch] = useReducer(settingsReducer, initState);
 
     const setSettings = (settingsData: Settings | null) => {
+        document.title = settingsData?.name || 'Calendar'
+        document.head.getElementsByTagName('link').item(0)?.setAttribute('href', appImage(settingsData?.logo!))
         storageService.setSettings(settingsData!)
         dispatch({
             type: 'SETSETTINGS',

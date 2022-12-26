@@ -26,7 +26,7 @@ class SettingsService extends BaseService {
     }
 
     update(data: Settings){
-        return this.httpClient(this.httpUrl(''), 'PUT', data);
+        return this.httpClient<Settings>(this.httpUrl(''), 'PUT', data);
     }
 
     updateLogo(data: FormData){

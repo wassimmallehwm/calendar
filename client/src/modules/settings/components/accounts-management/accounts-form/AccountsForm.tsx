@@ -113,7 +113,8 @@ const AccountsForm = () => {
                                     </label>
                                     <input type="text" name="lastname" value={lastname} onChange={onChange}
                                         className="w-full p-2 border border-gray-300 rounded mt-1" />
-                                </div></>
+                                </div>
+                            </>
                         )
                     }
                     {

@@ -16,8 +16,6 @@ const Layout = ({ children }: any) => {
         settingsService.find().then(
             res => {
                 setSettings(res.data)
-                document.title = res.data.name || 'Calendar'
-                document.head.getElementsByTagName('link').item(0)?.setAttribute('href', appImage(settings?.logo!))
             },
             error => console.error(error)
         )
