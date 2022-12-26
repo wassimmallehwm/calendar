@@ -1,5 +1,5 @@
 const { ResponseSuccess, ResponseError } = require("../../shared/response");
-const { ErrorsHandler } = require("../../utils");
+const { ErrorsHandler, PermissionsHandler } = require("../../utils");
 const Event = require("./event.model");
 const EventDto = require("./event.dto");
 
@@ -88,17 +88,23 @@ class EventsService {
         }
     }
 
-    findByRange = async (start, end) => {
+    findByRange = async (start, end, currentUser) => {
+        const query = {
+            $and: [
+                {
+                    $or: [
+                        { startDate: { $gte: start } },
+                        { endDate: { $lte: end } }
+                    ]
+                },
+                this.eventsPermissions(currentUser)
+            ]
+        }
         try {
-            let result = await Event.find({
-                $or: [
-                    {startDate: { $gte: start }},
-                    {endDate: { $lte: end }}
-                ]
-            })
-            .populate({ path: 'createdBy', model: 'User' })
-            .populate({ path: 'category', model: 'Category' })
-            .populate({ path: 'allowedViewers', model: 'Group' });
+            let result = await Event.find(query)
+                .populate({ path: 'createdBy', model: 'User' })
+                .populate({ path: 'category', model: 'Category' })
+                .populate({ path: 'allowedViewers', model: 'Group' });
             if (result) {
                 result = result.map(elem => new EventDto(elem))
                 return new ResponseSuccess({
@@ -165,13 +171,13 @@ class EventsService {
                     message: "Event not found !"
                 })
             let result = await Event.findOneAndUpdate({ _id: id }, data, { new: true });
-            
+
             result = await result
-            .populate([
-                { path: 'createdBy', model: 'User' },
-                { path: 'category', model: 'Category' },
-                { path: 'allowedViewers', model: 'Group' }
-            ])
+                .populate([
+                    { path: 'createdBy', model: 'User' },
+                    { path: 'category', model: 'Category' },
+                    { path: 'allowedViewers', model: 'Group' }
+                ])
 
             return new ResponseSuccess({
                 status: 200,
@@ -202,6 +208,17 @@ class EventsService {
             return new ResponseError(
                 ErrorsHandler.handle(err, `${SERVICE_NAME}:delete`)
             )
+        }
+    }
+
+    eventsPermissions(currentUser) {
+        const groups = currentUser.groups ? currentUser.groups.map(group => group._id) : []
+        return PermissionsHandler.isAdmin(currentUser) ?
+        {} : {
+            $or: [
+                { createdBy: currentUser },
+                { allowedViewers: { $in: groups } }
+            ]
         }
     }
 }

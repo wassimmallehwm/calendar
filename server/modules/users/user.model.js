@@ -13,6 +13,13 @@ const UserSchema = new mongoose.Schema({
         unique: false,
         ref: "Role",
     },
+    groups: {
+        type: [mongoose.Schema.Types.ObjectId],
+        required: false,
+        unique: false,
+        ref: "Group",
+        default: []
+    },
     firstname: {
         type: String,
         required: false,

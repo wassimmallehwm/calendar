@@ -8,7 +8,7 @@ const ProtectedRoute = ({ roles, children }: any) => {
   const { setError } = useContext(ErrorContext);
 
   const hasRoles = () => {
-    return roles.includes(user.role.label)
+    return roles.includes(user.role.label) || (roles.length == 1 && roles[0] == "ALL")
   }
 
   if (!user) {

@@ -16,8 +16,8 @@ const authenticated = (req, res, next) => {
         if(!verified){
             return res.status(401).json({message : "Not Authorized !"})
         }
-        const { _id, role } = verified
-        req.user = { _id, role };
+        const { _id, role, groups } = verified
+        req.user = { _id, role, groups };
         next();
     } catch(e){
         if(e instanceof jwt.TokenExpiredError){

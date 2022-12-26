@@ -50,7 +50,7 @@ module.exports.getByRange = async (req, res) => {
       status,
       content,
       message
-    } = await EventsService.findByRange(start, end)
+    } = await EventsService.findByRange(start, end, req.user)
     res.status(status).json(success ? content : { message });
   } catch (err) {
     const { status, message } = ErrorsHandler.handle(err, `${SERVICE_NAME}:getByRange`)

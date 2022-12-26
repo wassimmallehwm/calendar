@@ -60,7 +60,10 @@ class AuthService {
             });
 
             let result = await item.save();
-            result = await result.populate({ path: 'role', model: 'Role', select: 'label' })
+            result = await result.populate(
+                { path: 'role', model: 'Role', select: 'label' },
+                { path: 'groups', model: 'Group', select: 'label' }
+            )
             return new ResponseSuccess({
                 status: 201,
                 content: new UserDto(result)
@@ -80,7 +83,8 @@ class AuthService {
                 })
 
             const user = await User.findOne({ email: username })
-                .populate({ path: 'role', model: 'Role', select: 'label' });
+                .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' });
             if (!user)
                 return new ResponseError({
                     status: 404,
@@ -101,8 +105,8 @@ class AuthService {
 
             const response = new AuthResponse({
                 user: new UserDto(user),
-                access_token: JwtService.generateToken(user._id, user.role),
-                refresh_token: JwtService.generateToken(user._id, user.role, true)
+                access_token: JwtService.generateToken(user),
+                refresh_token: JwtService.generateToken(user, true)
             })
             return new ResponseSuccess({
                 status: 200,
@@ -116,7 +120,8 @@ class AuthService {
     refresh_token = async (userId) => {
         try {
             const user = await User.findById(userId)
-                .populate({ path: 'role', model: 'Role', select: 'label' });
+                .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' });
             if (!user)
                 return new ResponseError({
                     status: 404,
@@ -124,8 +129,8 @@ class AuthService {
                 })
 
             const response = new AuthResponse({
-                access_token: JwtService.generateToken(user._id, user.role),
-                refresh_token: JwtService.generateToken(user._id, user.role, true)
+                access_token: JwtService.generateToken(user),
+                refresh_token: JwtService.generateToken(user, true)
             })
             return new ResponseSuccess({
                 status: 200,

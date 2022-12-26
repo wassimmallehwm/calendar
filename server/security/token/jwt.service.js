@@ -20,14 +20,18 @@ class JwtService {
     }
 
     generateToken = (
-        id,
-        role,
+        {
+            id,
+            role,
+            groups
+        },
         isRefresh = false
     ) => {
         return jwt.sign(
             {
                 _id: id,
-                role
+                role,
+                groups
             },
             JWT_SECRET,
             {

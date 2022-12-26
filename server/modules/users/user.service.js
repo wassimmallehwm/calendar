@@ -243,7 +243,7 @@ class UserService {
     }
 
     sendAccountVerificationEmail = ({ id, role, name, email }) => {
-        const token = JwtService.generateToken(id, role);
+        const token = JwtService.generateToken({id, role, groups:[]});
         var mailOptions = {
             to: email,
             subject: `${APP_NAME} - Verify your account`,

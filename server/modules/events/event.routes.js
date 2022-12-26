@@ -4,16 +4,16 @@ const { create, getAll, getByRange, getById, getPaginated, update, remove} = req
 
 router.post('/', authenticated, create);
 
-router.get('/', getAll);
+router.get('/', authenticated, getAll);
 
-router.get('/by-range', getByRange);
+router.get('/by-range', authenticated, getByRange);
 
-router.get('/list', getPaginated);
+router.get('/list', authenticated, getPaginated);
 
-router.get('/:id', getById);
+router.get('/:id', authenticated, getById);
 
-router.put('/:id', update);
+router.put('/:id', authenticated, update);
 
-router.delete('/:id', remove);
+router.delete('/:id', authenticated, remove);
 
 module.exports = router;

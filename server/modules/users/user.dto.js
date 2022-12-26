@@ -6,6 +6,7 @@ module.exports = class UserDto {
         email,
         phone,
         role,
+        groups,
         createdAt,
         imagePath
     }) {
@@ -16,6 +17,7 @@ module.exports = class UserDto {
         this.email = email;
         this.phone = phone;
         this.role = role;
+        this.groups = groups;
         this.createdAt = createdAt;
         this.imagePath = imagePath;
     }

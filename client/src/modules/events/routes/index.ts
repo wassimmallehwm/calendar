@@ -1,12 +1,13 @@
+import { Route } from '@shared/types';
 import { lazy } from 'react';
 const Calendar = lazy(() => import('../components/calendar/Calendar'));
 
-const eventsRoutes: any[] = [
+const eventsRoutes: Route[] = [
     {
         path: "/calendar",
         component: Calendar,
         status: 'PROTECTED',
-        roles: ["ADMIN"]
+        roles: ["ALL"]
     },
 ]
 
