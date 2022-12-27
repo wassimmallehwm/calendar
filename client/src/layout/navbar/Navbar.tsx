@@ -36,7 +36,15 @@ const Navbar = ({
         navigate('/')
     }
 
+    const toProfil = () => {
+        navigate('/settings/profil')
+    }
+
     const dropdownItems: DropdownItem[] = [
+        {
+            label: 'Profil',
+            action: toProfil
+        },
         {
             label: 'Sign out',
             action: onLogout
