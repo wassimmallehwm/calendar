@@ -115,18 +115,20 @@ class UserService {
         }
     }
 
-    findAllPaginated = async ({ page, limit, sortField, sortOrder, search }) => {
+    findAllPaginated = async ({ page, limit, sortField, sortOrder, search, query }) => {
         try {
             let filter = {}
-            if (search && search.trim() !== "") {
-                filter = {
-                    $or: [
-                        { firstname: { $regex: search, $options: 'i' } },
-                        { lastname: { $regex: search, $options: 'i' } },
-                        { email: { $regex: search, $options: 'i' } }
-                    ]
-                }
+            if(query){
+                filter = {...query}
             }
+            if (search && search.trim() !== "") {
+                filter['$or'] = [
+                    { firstname: { $regex: search, $options: 'i' } },
+                    { lastname: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ]
+            }
+            console.log(filter)
             const total = await User.find(filter)
                 .count()
                 .exec();

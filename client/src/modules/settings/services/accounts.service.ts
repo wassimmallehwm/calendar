@@ -25,6 +25,14 @@ class AccountsService extends BaseService {
         return this.httpClient(this.httpUrl('list'), "GET", query);
     }
 
+    findInGroup(groupId: string, query?: any){
+        return this.httpClient(this.httpUrl(`in-group/${groupId}`), "GET", query);
+    }
+
+    findOutGroup(groupId: string, query?: any){
+        return this.httpClient(this.httpUrl(`out-group/${groupId}`), "GET", query);
+    }
+
     findOne(id: string){
         return this.httpClient(this.httpUrl(id), 'GET');
     }

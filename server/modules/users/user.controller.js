@@ -2,6 +2,7 @@ const { ErrorsHandler } = require("../../utils");
 const User = require("./user.model");
 const UserService = require("./user.service");
 const { RoleService } = require("../roles");
+const { default: mongoose } = require("mongoose");
 
 module.exports.create = async (req, res) => {
   try {
@@ -77,7 +78,7 @@ module.exports.getAllPaginated = async (req, res) => {
     })
     res.status(status).json(success ? content : { message });
   } catch (err) {
-    const { status, message } = ErrorsHandler.handle(err, "UserController:getAll")
+    const { status, message } = ErrorsHandler.handle(err, "UserController:getAllPaginated")
     res.status(status).json({ message, entity: 'User' })
   }
 };
@@ -129,4 +130,56 @@ module.exports.search = async (req, res) => {
     res.status(status).json({ message, entity: 'User' })
   }
 }
+
+module.exports.getInGroup = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, sortField = "_id", sortOrder = 1, search } = req.query;
+    const query = {
+      'groups': new mongoose.Types.ObjectId(req.params.id)
+    }
+    const {
+      success,
+      status,
+      content,
+      message
+    } = await UserService.findAllPaginated({
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sortField,
+      sortOrder,
+      search,
+      query
+    })
+    res.status(status).json(success ? content : { message });
+  } catch (err) {
+    const { status, message } = ErrorsHandler.handle(err, "UserController:getInGroup")
+    res.status(status).json({ message, entity: 'User' })
+  }
+};
+
+module.exports.getOutGroup = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, sortField = "_id", sortOrder = 1, search } = req.query;
+    const query = {
+      'groups': {$ne: new mongoose.Types.ObjectId(req.params.id)}
+    }
+    const {
+      success,
+      status,
+      content,
+      message
+    } = await UserService.findAllPaginated({
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sortField,
+      sortOrder,
+      search,
+      query
+    })
+    res.status(status).json(success ? content : { message });
+  } catch (err) {
+    const { status, message } = ErrorsHandler.handle(err, "UserController:getOutGroup")
+    res.status(status).json({ message, entity: 'User' })
+  }
+};
 
