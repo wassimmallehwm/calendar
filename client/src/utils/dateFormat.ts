@@ -16,6 +16,15 @@ export const formatDateToInput = (date: any) => {
     return moment(date).format('YYYY-MM-DD')
 }
 
+export const formatToReadableDate = (date: string, time: string) => {
+    const _date = new Date(date)
+    let f = 'DD MMMM, YYYY'
+    if(time != '00:00'){
+        f += ', h:mma'
+    }
+    return moment(_date).format(f)
+}
+
 export const getMinutes = (date: any) => {
     const minutes = moment(date).minutes()
     if(minutes == 0){

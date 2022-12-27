@@ -1,4 +1,5 @@
 const moment = require("moment");
+const { CategoryDto } = require("../categories");
 const { UserDto } = require("../users");
 
 const formatEventDate = (date, time) => {
@@ -27,7 +28,7 @@ module.exports = class EventDto {
         this.id = _id;
         this.title = title
         this.description = description
-        this.category = category._id
+        this.category = new CategoryDto(category)
         this.backgroundColor = category.backgroundColor
         this.textColor = category.textColor
         // this.startDate = startDate

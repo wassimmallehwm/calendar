@@ -1,5 +1,6 @@
 const multer = require('multer')
 const fs = require('fs')
+const exec = require('child_process').exec;
 
 class FilesHandler {
     instance;
@@ -16,6 +17,19 @@ class FilesHandler {
             this.instance = this.createInstance()
         }
         return this.instance
+    }
+
+
+    createDir = (directory, callback) => {
+        if (!fs.existsSync(directory)) {
+            console.log(`${directory} does not exist`)
+            exec(`mkdir ${directory}`, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(error)
+                }
+                callback()
+            });
+        }
     }
 
     upload = (path) => {

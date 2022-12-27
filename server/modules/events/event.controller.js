@@ -9,11 +9,7 @@ module.exports.create = async (req, res) => {
   try {
     let item = req.body;
     item.createdBy = req.user
-    if (!item.category || item.category == "") {
-      const defaultCategoryResponse = await categoryService.findDefault()
-      if (defaultCategoryResponse.success)
-        item.category = defaultCategoryResponse.content._id
-    }
+    await setDefaultCategory(item)
     const {
       success,
       status,
@@ -98,12 +94,14 @@ module.exports.getPaginated = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   try {
+    let item = req.body;
+    await setDefaultCategory(item)
     const {
       success,
       status,
       content,
       message
-    } = await EventsService.update(req.params.id, req.body)
+    } = await EventsService.update(req.params.id, item)
 
     res.status(status).json(success ? content : { message });
   } catch (err) {
@@ -127,4 +125,14 @@ module.exports.remove = async (req, res) => {
     res.status(status).json({ message, entity: ENTITY_NAME })
   }
 };
+
+const setDefaultCategory = async(item) => {
+  if (!item.category || item.category == "") {
+    const defaultCategoryResponse = await categoryService.findDefault()
+    if (defaultCategoryResponse.success)
+      item.category = defaultCategoryResponse.content._id
+  } else {
+    item.category = item.category._id
+  }
+}
 

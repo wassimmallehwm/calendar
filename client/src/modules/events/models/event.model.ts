@@ -1,3 +1,5 @@
+import { Category, EmptyCategory } from '@modules/settings/models/Category';
+import { Account } from "@modules/settings/models/Account"
 import { formatDateToInput, getHours, getMinutes } from "@utils/dateFormat"
 
 export type Event = {
@@ -8,12 +10,13 @@ export type Event = {
     startTime: string,
     endDate: string,
     endTime: string,
-    category: string,
+    category: Category,
     textColor?: string,
     backgroundColor?: string,
     eventUrl?: string,
     isPrivate?: boolean,
-    allowedViewers?: any[]
+    allowedViewers?: any[],
+    createdBy?: Account
 }
 
 export const initEvent: Event = {
@@ -24,7 +27,7 @@ export const initEvent: Event = {
     startTime: '',
     endDate: '',
     endTime: '',
-    category: '',
+    category: EmptyCategory,
     eventUrl: '',
     isPrivate: false,
     allowedViewers: []
@@ -46,7 +49,8 @@ export const formatCalendarToEvent = (data: any) => {
         backgroundColor: data.backgroundColor,
         eventUrl: data.extendedProps.eventUrl,
         isPrivate: data.extendedProps.isPrivate,
-        allowedViewers: data.extendedProps.allowedViewers
+        allowedViewers: data.extendedProps.allowedViewers,
+        createdBy: data.extendedProps.createdBy
     }
     return result
 }
