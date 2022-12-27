@@ -5,5 +5,5 @@ import { Page } from "./page";
 import { Route } from "./route";
 import { Settings } from "./settings";
 
-export { AuthResponse, ErrorData };
-export type { Route, Settings, Page, DropdownItem };
+export { ErrorData };
+export type { Route, Settings, AuthResponse, Page, DropdownItem };

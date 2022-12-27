@@ -22,6 +22,6 @@
     {
         "label": "calendar",
         "url": "/calendar",
-        "roles": ["ADMIN", "USER", "GUEST"]
+        "roles": ["ADMIN", "USER"]
     }
 ]

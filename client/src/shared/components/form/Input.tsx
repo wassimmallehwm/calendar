@@ -12,7 +12,7 @@ const Input = ({ ...props }: InputProps) => {
     }
     return props.textarea ? (
         <textarea className={`w-full resize-none rounded mt-1 outline-hidden focus:border-primary-300 focus:outline-none focus:ring-1 ${error ? 'border-red-700' : 'border-gray-300'} ${editableClass}`} 
-        disabled={disabled} {...props}></textarea>
+        disabled={disabled} rows={3} {...props}></textarea>
     ) : (
         <input className={`w-full h-9 rounded mt-1 outline-hidden focus:border-primary-300 focus:outline-none focus:ring-1 ${error ? 'border-red-700' : 'border-gray-300'} ${editableClass}`} 
         disabled={disabled} {...props} />

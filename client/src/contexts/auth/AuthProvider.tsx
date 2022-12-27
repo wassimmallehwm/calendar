@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
-import { AuthResponse } from '@shared/types';
 import { AuthContext } from './AuthContext';
 import storageService from '@shared/services/storage.service';
+import { Account } from '@modules/settings/models/Account';
 
 const initState: any = {
     user: null
@@ -33,7 +33,7 @@ function authReducer(state: any, action: any){
 export const AuthProvider = (props?: any) => {
     const [state, dispatch] = useReducer(authReducer, initState);
 
-    const login = (userData: AuthResponse) => {
+    const login = (userData: Account) => {
         storageService.setUserData(userData)
         dispatch({
             type: 'LOGIN',

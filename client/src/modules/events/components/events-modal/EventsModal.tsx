@@ -38,7 +38,7 @@ const EventsModal = ({
 
     const modalTitle = id && id !== "" ? title : "Create an event"
 
-    const isEventCreator = () => (user._id == createdBy?._id && id != undefined) || !id
+    const isEventCreator = () => (user?._id == createdBy?._id && id != undefined) || !id
 
     return (
         <Modal

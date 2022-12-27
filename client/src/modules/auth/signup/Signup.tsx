@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../auth.service';
+import authService from '../auth.service';
 import logo from '@assets/logo.png'
 
 const Signup = () => {
@@ -23,7 +23,7 @@ const Signup = () => {
     
     const onSubmit = (e: any) => {
         e.preventDefault();
-        signup(signupInfo).then(
+        authService.signup(signupInfo).then(
             res => {
             },
             error => {

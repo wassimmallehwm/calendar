@@ -26,8 +26,9 @@ app.all("*",function(req, res, next){
 
 expressMiddelwares(app, __dirname);
 dbConnect();
-FilesHandler.createDir('public', () => console.log('Public created'))
-FilesHandler.createDir('public/images', () => console.log('Images created'))
+FilesHandler.createDir('public', () => console.log('Public folder created'))
+FilesHandler.createDir('public/images', () => console.log('Images folder created'))
+FilesHandler.createDir('public/users', () => console.log('Users folder created'))
 
 // ioConfig(io)
 server.listen(PORT, () => {

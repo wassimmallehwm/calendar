@@ -1,4 +1,5 @@
-import { AuthResponse, Settings } from "@shared/types";
+import { Account } from "@modules/settings/models/Account";
+import { Settings } from "@shared/types";
 
 class StorageService {
     private _SETTINGS = "settings";
@@ -16,11 +17,11 @@ class StorageService {
         return this.instance
     }
 
-    setUserData(userData: AuthResponse){
+    setUserData(userData: Account){
         localStorage.setItem(this._USER_DATA, JSON.stringify(userData))
     }
 
-    getUserData(): AuthResponse | null{
+    getUserData(): Account | null{
         const data = localStorage.getItem(this._USER_DATA)
         if(data){
             return JSON.parse(data)

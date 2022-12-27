@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { userImage } from '@utils/filePath'
 import { useTranslation } from 'react-i18next'
 import { Config } from '@config/Config'
-import { Dropdown } from '@shared/components'
+import { Button, Dropdown } from '@shared/components'
 import { DropdownItem } from '@shared/types'
 
 
@@ -78,54 +78,19 @@ const Navbar = ({
                     }
                 </ul>
                 <div className='flex items-center gap-4'>
-                    <Dropdown trigger={(
-                        <img className="h-8 w-8 rounded-full" src={userImage("user_default")} alt="user" />
-                    )}
-                        items={dropdownItems}
-                    />
-                    {/* <Menu as="div" className="ml-3 relative">
-                        <div>
-                            <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-slate-50">
-                                <span className="sr-only">Open user menu</span>
+                    {
+                        user ? (
+                            <Dropdown trigger={(
                                 <img className="h-8 w-8 rounded-full" src={userImage("user_default")} alt="user" />
-                            </Menu.Button>
-                        </div>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                        >
-                            <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {userNavigation.map((item) => (
-                                    <Menu.Item key={item.name}>
-                                        {({ active }) => (
-                                            <a
-                                                onClick={item.click}
-                                                className={classNames(
-                                                    active ? 'bg-gray-100' : '',
-                                                    'block px-4 py-2 text-sm text-gray-700 cursor-pointer'
-                                                )}
-                                            >
-                                                {item.name}
-                                            </a>
-                                        )}
-                                    </Menu.Item>
-                                ))}
-                            </Menu.Items>
-                        </Transition>
-                    </Menu> */}
-                    {/* <button className="p-1 flex items-center text-slate-50"
-                        onClick={onLogout}
-                        title="Sign out"
-                        tabIndex={1}
-                    >
-                        <FaSignOutAlt className="text-slate-50 mx-1" size="25px" />
-                        Sign out
-                    </button> */}
+                            )}
+                                items={dropdownItems}
+                            />
+                        ) : (
+                            <Button color='primary' onClick={() => navigate('/login')}>
+                                Login
+                            </Button>
+                        )
+                    }
                 </div>
 
             </div>

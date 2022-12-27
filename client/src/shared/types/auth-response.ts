@@ -1,12 +1,7 @@
-export class AuthResponse {
-    name: string;
-    version: string;
+import { Account } from "@modules/settings/models/Account";
 
-    constructor(json?: {
-        name: string,
-        version: string
-    }) {
-        this.name = json?.name!;
-        this.version = json?.version!;
-    }
+export type AuthResponse = {
+    user: Account;
+    access_token?: string;
+    refresh_token?: string;
 }

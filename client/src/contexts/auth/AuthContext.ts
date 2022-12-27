@@ -1,15 +1,15 @@
 import React from 'react';
-import { AuthResponse } from '@shared/types';
+import { Account } from '@modules/settings/models/Account';
 
 export interface AuthContextInterface {
-  user: any | null;
-  login: (userData: AuthResponse) => void;
+  user: Account | null;
+  login: (userData: Account) => void;
   logout: () => void;
 }
 
 export const authContextDefaults: AuthContextInterface = {
   user: null,
-  login: (userData: AuthResponse) => null,
+  login: (userData: Account) => null,
   logout: () => null
 };
 

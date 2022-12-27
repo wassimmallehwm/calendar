@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@contexts/auth/AuthContext';
-import { authenticate } from './auth.service';
+import authService from './auth.service';
 import { SettingsContext } from '@contexts/settings/SettingsContext';
 import { appImage } from '@utils/filePath';
 
@@ -10,8 +10,8 @@ const Login = () => {
     const { settings } = useContext(SettingsContext)
     const navigate = useNavigate();
     const [loginInfo, setLoginInfo] = useState({
-        username: '',
-        password: ''
+        username: 'admin@admin.com',
+        password: 'password'
     })
     const [loading, setLoading] = useState(false)
 
@@ -35,7 +35,7 @@ const Login = () => {
     const onSubmit = (e: any) => {
         e.preventDefault();
         setLoading(true)
-        authenticate(loginInfo).then(
+        authService.authenticate(loginInfo).then(
             res => onLogin(res.data.user),
             error => {
                 console.log("ERROR", error.response.data);
@@ -46,9 +46,9 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-slate-50 flex justify-center items-center">
-            <div className="max-w-md w-full mx-auto mt-4 bg-white px-8 pb-8 border border-gray-300">
-                <div className="max-w-md w-full mx-auto flex flex-col items-center">
+        <div className="bg-primary-50 h-full flex justify-center items-center pb-20">
+            <div className="max-w-md w-full mx-auto bg-white px-8 py-8 rounded-lg shadow-lg">
+                <div className="max-w-md w-full mx-auto flex flex-col items-center gap-4 py-2">
                     <img src={appImage(settings?.logo!)} className="w-32 text-center" />
                     <div className="text-2xl font-bold text-gray-800 text-center">
                         {settings?.name} | Login
