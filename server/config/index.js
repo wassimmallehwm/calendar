@@ -1,6 +1,6 @@
 module.exports = {
-    APP_NAME: process.env.APP_NAME || 'Municipality',
-    DATABASE_URL: process.env.DATABASE_URL || 'mongodb://localhost:27017/municipality',
+    APP_NAME: process.env.APP_NAME || 'events',
+    DATABASE_URL: process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/events',
     PORT: process.env.PORT || 4000,
     //JWT config
     JWT_SECRET: process.env.JWT_SECRET || '$2a$10$.6vrQSA.tIpm.C1thlZ8fOKrnJ6RzHNdcdWNXPEeio0QZxrO241zW',

@@ -1,5 +1,6 @@
 const multer = require('multer')
 const fs = require('fs')
+const os = require('os');
 const exec = require('child_process').exec;
 
 class FilesHandler {
@@ -19,11 +20,19 @@ class FilesHandler {
         return this.instance
     }
 
-
     createDir = (directory, callback) => {
-        if (!fs.existsSync(directory)) {
-            console.log(`${directory} does not exist`)
-            exec(`mkdir ${directory}`, (error, stdout, stderr) => {
+        let cmd = ''
+        let directoryPath = ''
+        if(os.platform() == 'win32'){
+            directoryPath = directory.join('\\')
+            cmd = `md ${directory.join('\\')}`
+        } else {
+            directoryPath = directory.join('/')
+            cmd = `mkdir ${directory.join('/')}`
+        }
+        if (!fs.existsSync(directoryPath)) {
+            console.log(`${directoryPath} does not exist`)
+            exec(cmd, (error, stdout, stderr) => {
                 if (error) {
                     console.error(error)
                 }
