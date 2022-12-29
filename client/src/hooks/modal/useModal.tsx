@@ -25,12 +25,16 @@ const useModal = ({
 
     const confirm = () => {
         save()
-        onSave ? onSave() : null
+        if(onSave != undefined){
+            onSave()
+        }
     }
 
     const cancel = () => {
         closeModal()
-        onCancel ? onCancel() : null
+        if(onCancel != undefined){
+            onCancel()
+        }
     }
 
 
