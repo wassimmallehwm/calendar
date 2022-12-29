@@ -1,5 +1,6 @@
 import { Account } from '@modules/users/models/Account';
 import { BaseService } from '@shared/services/base.service';
+import { Page } from '@shared/types';
 
 class UserssService extends BaseService {
     private SRC_URL = "users/";
@@ -22,7 +23,7 @@ class UserssService extends BaseService {
     }
 
     list(query?: any){
-        return this.httpClient(this.httpUrl('list'), "GET", query);
+        return this.httpClient<Page<Account>>(this.httpUrl('list'), "GET", query);
     }
 
     findInGroup(groupId: string, query?: any){
@@ -34,7 +35,7 @@ class UserssService extends BaseService {
     }
 
     findOne(id: string){
-        return this.httpClient(this.httpUrl(id), 'GET');
+        return this.httpClient<Account>(this.httpUrl(id), 'GET');
     }
 
     create(data: Account){

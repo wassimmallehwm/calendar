@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Loader, Confirmation, Button, Modal, PageTitle, DataGrid } from '../../../../shared/components';
 import moment from 'moment';
 import { AuthContext } from '@contexts/auth/AuthContext';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash, FaUsers } from 'react-icons/fa';
 import UsersForm from '../users-form/UsersForm';
 import httpErrorHandler from '@utils/error-handler';
 import { ErrorContext } from '@contexts/index';
@@ -13,6 +13,8 @@ import rolesService from '@modules/settings/services/roles.service';
 import { useTranslation } from 'react-i18next';
 import { formateDate } from '@utils/dateFormat';
 import { isAdmin } from '@utils/roles';
+import { useModal } from '@hooks/index';
+import UsersGroups from '../users-groups/UsersGroups';
 
 const Users = () => {
     const { user } = useContext(AuthContext)
@@ -27,7 +29,6 @@ const Users = () => {
     const [deleteUser, setDeleteUser] = useState<any>();
     const [editUserModal, setEditUserModal] = useState<any>(false);
     const [deleteUserModal, setDeleteUserModal] = useState<any>(false);
-    const [mode, setMode] = useState<any>('add');
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [totalRecords, setTotalRecords] = useState(0);
     const [dataState, setDataState] = useState({
@@ -40,34 +41,43 @@ const Users = () => {
     })
     const [search, setSearch] = useState<string>('')
 
+    
+    const onChangeGroups = (newValue: any[]) => {
+        setEditUser({ ...editUser, groups: newValue })
+    }
+
+    const groupsModal = useModal({
+        title: 'Groupes',
+        save: () => saveAccount(),
+        modalBtns: true,
+        content: <UsersGroups onChange={onChangeGroups} user={editUser} />
+    })
+
     const getUsers = () => {
         setDataLoading(true)
-        user && usersService.list({ ...dataState, search }).then(
-            (res: any) => {
+        usersService.list({ ...dataState, search }).then(
+            res => {
                 setAccounts(res.data.docs)
                 setTotalRecords(res.data.total)
                 setDataLoading(false)
-            },
-            error => {
-                console.log(error);
-                setDataLoading(false)
-            }
-        )
-    }
-
-    const getOneUser = (id: string) => {
-        setLoading(true)
-        usersService.findOne(id).then(
-            (res: any) => {
-                setEditUser(res.data)
-                openAddModal()
             }
         ).catch(error => {
             const { status, message } = httpErrorHandler(error);
+            setError({ status, message, tryAgain: () => getUsers() })
+        }).finally(() =>setDataLoading(false))
+    }
+
+    const getOneUser = async (id: string) => {
+        setLoading(true)
+        try{
+            const { data } = await usersService.findOne(id)
+            setEditUser(data)
+        } catch(error: any){
+            const { status, message } = httpErrorHandler(error);
             setError({ status, message, tryAgain: () => getOneUser(id) })
-        }).finally(() => {
+        } finally {
             setLoading(false)
-        })
+        }
     }
 
     const removeUserAccount = () => {
@@ -103,6 +113,9 @@ const Users = () => {
     }, []);
 
     const onSuccess = () => {
+        groupsModal.closeModal()
+        closeAddModal()
+        getUsers();
         showToast('success', "Operation success")
     }
 
@@ -125,24 +138,18 @@ const Users = () => {
         }
     }
 
-    const formatDate = (date: any) => {
-        return moment(date).format("DD/MM/YYYY HH:mm")
-    }
-
     const openAddModal = () => {
         setEditUserModal(true)
     }
 
     const closeAddModal = () => {
-        setMode('add')
         setEditUserModal(false)
         setEditUser(EmptyAccount)
     }
 
-    const openEditModal = (data: any) => {
-        setMode('edit')
-        //setEditUser(data)
-        getOneUser(data._id)
+    const openEditModal = async (data: any) => {
+        await getOneUser(data._id)
+        openAddModal()
     }
 
     const openDeleteModal = (data: any) => {
@@ -159,6 +166,11 @@ const Users = () => {
         setEditUser({ ...editUser, [e.target.name]: e.target.value })
     }
 
+    const openGroupsModal = async (data: any) => {
+        await getOneUser(data._id)
+        groupsModal.openModal()
+    }
+
     const addUserModal = (
         <Modal title='Add user' color="primary" open={editUserModal} confirm={saveAccount} cancel={closeAddModal} footerBtns >
             <UsersForm account={editUser} onChange={onEditUserChange} />
@@ -173,6 +185,9 @@ const Users = () => {
     const actionRender = (data: any) => {
         return isAdmin(data.role.label) ? null : (
             <>
+                <Button rounded title="Groups" onClick={() => openGroupsModal(data)} color="primary">
+                    <FaUsers size="14px" />
+                </Button>
                 <Button rounded title="Edit" onClick={() => openEditModal(data)} color="primary">
                     <FaEdit size="14px" />
                 </Button>
@@ -224,6 +239,7 @@ const Users = () => {
         <div className="main-div">
             {addUserModal}
             {deleteModal}
+            {groupsModal.modal}
             <PageTitle color="primary">{t('titles.accounts')}</PageTitle>
             <div className="flex justify-between items-center my-2">
                 <input type="text" autoComplete='off' name="code" placeholder='Search'

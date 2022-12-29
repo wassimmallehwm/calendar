@@ -53,7 +53,10 @@ class UserService {
             });
 
             let result = await item.save();
-            result = await result.populate({ path: 'role', model: 'Role', select: 'label' })
+            result = await result.populate([
+                { path: 'role', model: 'Role', select: 'label' },
+                { path: 'groups', model: 'Group', select: 'label' }
+            ])
             return new ResponseSuccess({
                 status: 201,
                 content: new UserDto(result)
@@ -72,7 +75,8 @@ class UserService {
     findById = async (id) => {
         try {
             const result = await User.findById(id)
-                .populate({ path: 'role', model: 'Role', select: 'label' });
+                .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' });
             if (!result) {
                 return new ResponseError({
                     status: 404,
@@ -97,7 +101,8 @@ class UserService {
     findAll = async (query = {}) => {
         try {
             let result = await User.find(query)
-                .populate({ path: 'role', model: 'Role', select: 'label' });
+                .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' });
             if (result) {
                 result = result.map(elem => new UserDto(elem))
                 return new ResponseSuccess({
@@ -118,8 +123,8 @@ class UserService {
     findAllPaginated = async ({ page, limit, sortField, sortOrder, search, query }) => {
         try {
             let filter = {}
-            if(query){
-                filter = {...query}
+            if (query) {
+                filter = { ...query }
             }
             if (search && search.trim() !== "") {
                 filter['$or'] = [
@@ -128,7 +133,6 @@ class UserService {
                     { email: { $regex: search, $options: 'i' } }
                 ]
             }
-            console.log(filter)
             const total = await User.find(filter)
                 .count()
                 .exec();
@@ -138,6 +142,7 @@ class UserService {
                 .limit(limit)
                 .sort({ [sortField.replace('displayName', 'firstname')]: sortOrder })
                 .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' })
                 .exec();
 
             if (result) {
@@ -172,7 +177,10 @@ class UserService {
                     message: "User not found !"
                 })
             let result = await User.findOneAndUpdate({ _id: id }, data, { new: true });
-            result = await result.populate({ path: 'role', model: 'Role', select: 'label' });
+            result = await result.populate([
+                { path: 'role', model: 'Role', select: 'label' },
+                { path: 'groups', model: 'Group', select: 'label' }
+            ]);
 
             return new ResponseSuccess({
                 status: 200,
@@ -224,6 +232,7 @@ class UserService {
             }
             let result = await User.find(filter)
                 .populate({ path: 'role', model: 'Role', select: 'label' })
+                .populate({ path: 'groups', model: 'Group', select: 'label' })
                 .select('firstname lastname email imagePath')
                 .limit(limit)
                 .exec();
@@ -245,7 +254,7 @@ class UserService {
     }
 
     sendAccountVerificationEmail = ({ id, role, name, email }) => {
-        const token = JwtService.generateToken({id, role, groups:[]});
+        const token = JwtService.generateToken({ id, role, groups: [] });
         var mailOptions = {
             to: email,
             subject: `${APP_NAME} - Verify your account`,

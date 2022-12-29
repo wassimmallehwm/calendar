@@ -1,4 +1,4 @@
-import { Role } from "../../settings/models/Role"
+import { Role, Group } from "@modules/settings/models"
 
 export interface Account {
     _id? : string
@@ -10,6 +10,7 @@ export interface Account {
     legalname? :  string
     imagePath? : string
     role? : Role
+    groups? : Group[]
     createdAt? : Date
 }
 
