@@ -1,5 +1,5 @@
+import { Account } from '@modules/users/models/Account';
 import React from 'react';
-import { Account } from '@modules/settings/models/Account';
 
 export interface AuthContextInterface {
   user: Account | null;

@@ -1,5 +1,5 @@
 import { Category, EmptyCategory } from '@modules/settings/models/Category';
-import { Account } from "@modules/settings/models/Account"
+import { Account } from "@modules/users/models/Account"
 import { formatDateToInput, getHours, getMinutes } from "@utils/dateFormat"
 
 export type Event = {

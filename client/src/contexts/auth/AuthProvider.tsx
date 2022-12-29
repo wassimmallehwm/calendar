@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import { AuthContext } from './AuthContext';
 import storageService from '@shared/services/storage.service';
-import { Account } from '@modules/settings/models/Account';
+import { Account } from '@modules/users/models/Account';
 
 const initState: any = {
     user: null

@@ -1,37 +1,32 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { Loader, Confirmation, Button, Modal, PageTitle, DataGrid } from '../../../shared/components';
+import { Loader, Confirmation, Button, Modal, PageTitle, DataGrid } from '../../../../shared/components';
 import moment from 'moment';
-// import NoData from '../NoData';
 import { AuthContext } from '@contexts/auth/AuthContext';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import UserForm from '../user-form/UserForm';
-import { UsersService } from '../users.service';
+import UsersForm from '../users-form/UsersForm';
+import httpErrorHandler from '@utils/error-handler';
+import { ErrorContext } from '@contexts/index';
+import { Account, EmptyAccount } from '@modules/users/models/Account';
+import { showLoading, showToast } from '@utils/toast';
+import usersService from '@modules/users/services/users.service';
+import rolesService from '@modules/settings/services/roles.service';
+import { useTranslation } from 'react-i18next';
+import { formateDate } from '@utils/dateFormat';
+import { isAdmin } from '@utils/roles';
 
 const Users = () => {
     const { user } = useContext(AuthContext)
-    const usersService = new UsersService();
+    const { setError } = useContext(ErrorContext)
 
-    const initUser = {
-        email: "",
-        firstname: "",
-        lastname: "",
-        roles: [],
-        phone: "",
-        sex: "",
-        birthdate: "",
-        _id: ""
-    }
+    const { t } = useTranslation()
 
     const [loading, setLoading] = useState<any>(false);
-    const [tableKey, setTableKey] = useState<any>(false);
-    const [usersList, setUsersList] = useState<any>(null);
+    const [accounts, setAccounts] = useState<any>(null);
     const [rolesList, setRolesList] = useState<any>(null);
-    const [editUser, setEditUser] = useState<any>(initUser);
+    const [editUser, setEditUser] = useState<Account>(EmptyAccount);
     const [deleteUser, setDeleteUser] = useState<any>();
     const [editUserModal, setEditUserModal] = useState<any>(false);
     const [deleteUserModal, setDeleteUserModal] = useState<any>(false);
-    const [password, setPassword] = useState<any>('');
-    const [passwordCheck, setPasswordCheck] = useState<any>('');
     const [mode, setMode] = useState<any>('add');
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -49,7 +44,7 @@ const Users = () => {
         setDataLoading(true)
         user && usersService.list({ ...dataState, search }).then(
             (res: any) => {
-                setUsersList(res.data.docs)
+                setAccounts(res.data.docs)
                 setTotalRecords(res.data.total)
                 setDataLoading(false)
             },
@@ -61,19 +56,22 @@ const Users = () => {
     }
 
     const getOneUser = (id: string) => {
-        user && usersService.findOne(id).then(
+        setLoading(true)
+        usersService.findOne(id).then(
             (res: any) => {
-                setEditUser(res.data);
+                setEditUser(res.data)
                 openAddModal()
-            },
-            error => {
-                console.log(error);
             }
-        )
+        ).catch(error => {
+            const { status, message } = httpErrorHandler(error);
+            setError({ status, message, tryAgain: () => getOneUser(id) })
+        }).finally(() => {
+            setLoading(false)
+        })
     }
 
     const removeUserAccount = () => {
-        user && usersService.removeUser(deleteUser._id).then(
+        user && usersService.delete(deleteUser._id).then(
             (res) => {
                 getUsers()
                 closeDeleteModal()
@@ -86,14 +84,14 @@ const Users = () => {
         )
     }
     const getRoles = () => {
-        user && usersService.findRoles().then(
-            (res) => {
+        rolesService.findAll().then(
+            (res: any) => {
                 setRolesList(res.data)
-            },
-            error => {
-                console.log(error);
             }
-        )
+        ).catch(error => {
+            const { status, message } = httpErrorHandler(error);
+            console.error(message)
+        })
     }
 
     useEffect(() => {
@@ -104,27 +102,27 @@ const Users = () => {
         getRoles();
     }, []);
 
-    const addOrEditUser = () => {
-        setLoading(true);
-        let userData = null
-        if (mode === 'add') {
-            userData = { ...editUser, password, passwordCheck }
-        } else {
-            userData = editUser
-        }
-        user && usersService.addOrUpdateUser(mode, userData).then(
-            (res) => {
-                setLoading(false);
-                getUsers()
-                closeAddModal();
-                // Toast("SUCCESS", "User details saved successfully");
-            },
-            error => {
-                console.log(error);
-                setLoading(false);
-                // Toast("ERROR", "Error saving user details !");
+    const onSuccess = () => {
+        showToast('success', "Operation success")
+    }
+
+    const saveAccount = async () => {
+        setLoading(true)
+        showLoading()
+        try {
+            if (editUser._id) {
+                await usersService.update(editUser._id, editUser)
+                onSuccess()
+            } else {
+                await usersService.create(editUser)
+                onSuccess()
             }
-        )
+        } catch (error) {
+            const { message } = httpErrorHandler(error);
+            showToast('error', message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const formatDate = (date: any) => {
@@ -138,7 +136,7 @@ const Users = () => {
     const closeAddModal = () => {
         setMode('add')
         setEditUserModal(false)
-        setEditUser(initUser)
+        setEditUser(EmptyAccount)
     }
 
     const openEditModal = (data: any) => {
@@ -161,18 +159,9 @@ const Users = () => {
         setEditUser({ ...editUser, [e.target.name]: e.target.value })
     }
 
-    const onChangeRole = (role: string) => {
-        if(editUser.roles.find((elem:any) => elem.label === role) != undefined){
-            setEditUser((prev: any) => ({...prev, roles: prev.roles.filter((elem:any) => elem.label != role)}))
-        } else {
-            const addRole = rolesList.find((elem:any) => elem.label === role)
-            setEditUser((prev: any) => ({...prev, roles: [...prev.roles, addRole]}))
-        }
-    }
-
     const addUserModal = (
-        <Modal title='Add user' color="primary" open={editUserModal} confirm={addOrEditUser} cancel={closeAddModal} footerBtns >
-            <UserForm rolesList={rolesList} onChangeRole={onChangeRole} userData={editUser} onChange={onEditUserChange} />
+        <Modal title='Add user' color="primary" open={editUserModal} confirm={saveAccount} cancel={closeAddModal} footerBtns >
+            <UsersForm account={editUser} onChange={onEditUserChange} />
         </Modal>
     );
 
@@ -181,46 +170,25 @@ const Users = () => {
             cancel={closeDeleteModal} color="secondary" text={`Are you sure you want to delete the user ?`} />
     );
 
-    const isAdmin = (roles: any) => {
-        const admin = roles.find((elem: any) => elem.label === 'ADMIN');
-        return admin != null;
-    }
-
-    const dateRender = (data: any) => {
-        return formatDate(data.createdAt)
-    }
-
-    const rolesRender = (data: any) => {
-        return data.roles.map(function (elem: any) {
-            return elem.label;
-        }).join(",");
-    }
-
-    const nameRender = (data: any) => {
-        return `${data.firstname} ${data.lastname}`
-    }
-
     const actionRender = (data: any) => {
-        return isAdmin(data.roles) ? null
-            :
-            (
-                <>
-                    <Button rounded onClick={() => openEditModal(data)} color="primary">
-                        <FaEdit size="14px" />
-                    </Button>
-                    <Button rounded onClick={() => openDeleteModal(data)} color="secondary">
-                        <FaTrash size="14px" />
-                    </Button>
-                </>
-            )
-
+        return isAdmin(data.role.label) ? null : (
+            <>
+                <Button rounded title="Edit" onClick={() => openEditModal(data)} color="primary">
+                    <FaEdit size="14px" />
+                </Button>
+                <Button rounded title="Delete" onClick={() => openDeleteModal(data._id)} color="secondary">
+                    <FaTrash size="14px" />
+                </Button>
+            </>
+        )
     }
 
     const primeColumns = [
-        { field: 'firstname', header: 'Name', body: nameRender, filter: true, sortable: true },
-        { field: 'roles', header: 'Roles', body: rolesRender, filter: true, sortable: true },
-        { field: 'createdAt', header: 'Created at', body: dateRender, sortable: true },
-        { field: '_id', header: 'Action', body: actionRender, style: { "textAlign": 'center' }, headerStyle: { "textAlign": 'center' } }
+        { field: 'displayName', header: 'Name', filter: true, sortable: true },
+        { field: 'email', header: 'Email', filter: true, sortable: true },
+        { field: 'role.label', header: 'Role', filter: true, sortable: true },
+        { field: 'createdAt', header: 'Created at', body: (data: any) => formateDate(data.createdAt), sortable: true },
+        { field: '_id', header: 'Action', body: actionRender }
     ];
 
     const onPage = (event: any) => {
@@ -236,9 +204,10 @@ const Users = () => {
 
     const dataTable = (
         <div className="card">
-            <DataGrid 
-                columns={primeColumns} 
-                list={usersList}
+            <DataGrid
+                paginated
+                columns={primeColumns}
+                list={accounts}
                 sortField={dataState.sortField}
                 sortOrder={dataState.sortOrder}
                 onSort={(data: any) => setDataState({ ...dataState, sortField: data.sortField, sortOrder: data.sortOrder })}
@@ -251,21 +220,20 @@ const Users = () => {
             />
         </div>
     )
-
     return (
         <div className="main-div">
             {addUserModal}
             {deleteModal}
-            <PageTitle color="primary">Users</PageTitle>
+            <PageTitle color="primary">{t('titles.accounts')}</PageTitle>
             <div className="flex justify-between items-center my-2">
                 <input type="text" autoComplete='off' name="code" placeholder='Search'
                     onChange={(e: any) => setSearch(e.target.value)} value={search}
                     className="w-1/2 h-full p-2 border border-gray-300 rounded mt-1" />
-                <Button rounded title="Ajouter" onClick={openAddModal} outline color="secondary">
+                <Button rounded title="Add" onClick={() => openAddModal()} outline color="secondary">
                     <FaPlus size="14px" />
                 </Button>
             </div>
-            {usersList ? dataTable : (<Loader />)}
+            {accounts ? dataTable : (<Loader />)}
         </div>
     )
 }

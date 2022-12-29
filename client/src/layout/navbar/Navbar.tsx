@@ -37,7 +37,7 @@ const Navbar = ({
     }
 
     const toProfil = () => {
-        navigate('/settings/profil')
+        navigate('/profile')
     }
 
     const dropdownItems: DropdownItem[] = [

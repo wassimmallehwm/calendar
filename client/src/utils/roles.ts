@@ -13,3 +13,7 @@ export const hasRoles = (roles: string[], userRoles: any): boolean => {
     })
     return result
 }
+
+export const isAdmin = (label: string) => {
+    return label === "ADMIN"
+}

@@ -1,4 +1,4 @@
-import { Role } from "./Role"
+import { Role } from "../../settings/models/Role"
 
 export interface Account {
     _id? : string

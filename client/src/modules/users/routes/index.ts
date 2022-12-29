@@ -1,13 +1,21 @@
+import { Route } from '@shared/types';
 import { lazy } from 'react';
-const Users = lazy(() => import('../users-list/Users'));
+const Users = lazy(() => import('../components/users-list/Users'));
+const UsersProfile = lazy(() => import('../components/users-profile/UsersProfile'));
 
-const usersRoutes: any[] = [
+const accountsRoutes: Route[] = [
     {
-        path: "/users",
+        path: "/accounts",
         component: Users,
         status: 'PROTECTED',
         roles: ["ADMIN"]
     },
+    {
+        path: "/profile",
+        component: UsersProfile,
+        status: 'PROTECTED',
+        roles: ["ALL"]
+    }
 ]
 
-export default usersRoutes;
+export default accountsRoutes;

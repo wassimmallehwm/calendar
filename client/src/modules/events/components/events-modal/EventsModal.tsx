@@ -26,15 +26,12 @@ const EventsModal = ({
 }: EventsModalProps) => {
 
     const { user } = useContext(AuthContext)
-    const [categories, setCategories] = useState<Category[]>([])
-    const [groups, setGroups] = useState<Group[]>([])
 
     const {
         id,
         title,
         createdBy
     } = event
-
 
     const modalTitle = id && id !== "" ? title : "Create an event"
 

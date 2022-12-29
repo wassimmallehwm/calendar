@@ -1,10 +1,10 @@
+import { Account } from '@modules/users/models/Account';
 import { BaseService } from '@shared/services/base.service';
-import { Account } from '../models/Account';
 
-class AccountsService extends BaseService {
+class UserssService extends BaseService {
     private SRC_URL = "users/";
 
-    private static instance: AccountsService;
+    private static instance: UserssService;
 
     constructor() {
         super();
@@ -12,7 +12,7 @@ class AccountsService extends BaseService {
 
     static getInstance() {
         if (this.instance == null) {
-            this.instance = new AccountsService()
+            this.instance = new UserssService()
         }
         return this.instance
     }
@@ -51,5 +51,5 @@ class AccountsService extends BaseService {
 
 }
 
-export default AccountsService.getInstance();
+export default UserssService.getInstance();
 

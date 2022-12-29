@@ -1,4 +1,4 @@
-import { Account } from "@modules/settings/models/Account";
+import { Account } from "@modules/users/models/Account";
 
 export type AuthResponse = {
     user: Account;
