@@ -8,6 +8,7 @@ const { ErrorsHandler } = require("../../utils");
 const { JwtService, PasswordEncoder } = require("../../security");
 const EmailService = require("../../mails/email.service");
 const { RoleService } = require("../roles");
+const { default: mongoose } = require("mongoose");
 
 
 class UserService {
@@ -270,6 +271,26 @@ class UserService {
             html: EmailService.get(MAIL_ACCOUNT_CREATION)(name, email, password)
         };
         EmailService.send(mailOptions);
+    }
+
+    createMockUsers = async (roleId) => {
+        for (let index = 0; index < 20; index++) {
+            let i = 0
+            if(index < 10){
+                i = `0${index}`
+            } else {
+                i = index
+            }
+            const item = new User({
+                email: `user${i}@mail.com`,
+                firstname: `user${i}`,
+                lastname: `user${i}`,
+                role: roleId, //new mongoose.Types.ObjectId('63a72ff67ddac81fadb7bff5'),
+                password: `user${i}`
+            });
+            await item.save();
+
+        }
     }
 
     nullOrEmpty = (data) => {
