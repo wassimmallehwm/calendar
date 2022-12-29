@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaPlus, FaTrash, FaUsers } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { ErrorContext } from 'src/contexts';
 import { Group, EmptyGroup } from '@modules/settings/models/Group';
@@ -9,6 +9,8 @@ import { Button, Confirmation, DataGrid, Loader, Modal, PageTitle } from '@share
 import { httpErrorHandler, showLoading, showToast } from 'src/utils';
 import { formateDate } from '@utils/dateFormat';
 import GroupsForm from '../groups-form/GroupsForm';
+import { useModal } from '@hooks/index';
+import GroupsUsers from '../groups-users/GroupsUsers';
 
 const GroupsList = () => {
     const { t } = useTranslation();
@@ -34,6 +36,12 @@ const GroupsList = () => {
         limit: 10,
         sortField: null,
         sortOrder: null
+    })
+
+    const usersModal = useModal({
+        title: 'Accounts',
+        modalBtns: false,
+        content: <GroupsUsers group={group!}/>
     })
 
     const getList = () => {
@@ -106,6 +114,11 @@ const GroupsList = () => {
         setArchiveId('')
     }
 
+    const openUsersModal = (data: any) => {
+        setGroup(data)
+        usersModal.openModal()
+    }
+
     const _archiveModal = (
         <Confirmation open={archiveModal} confirm={archive}
             cancel={closeArchiveModal} color="secondary" text={`Are you sure you want to delete this Group ?`} />
@@ -119,6 +132,9 @@ const GroupsList = () => {
 
     const actionRender = (data: any) => (
         <>
+            <Button rounded title="Edit" onClick={() => openUsersModal(data)} color="primary">
+                <FaUsers size="14px" />
+            </Button>
             <Button rounded title="Edit" onClick={() => openAddModal(data)} color="primary">
                 <FaEdit size="14px" />
             </Button>
@@ -166,6 +182,7 @@ const GroupsList = () => {
         <div className="main-div">
             {_addModal}
             {_archiveModal}
+            {usersModal.modal}
             <PageTitle color="primary">{t('titles.groups')}</PageTitle>
             <div className="flex justify-between items-center my-2">
                 <input type="text" autoComplete='off' name="code" placeholder='Search'

@@ -3,18 +3,18 @@ import React, { useState } from 'react'
 
 type useModalProps = {
     title: string
-    save: any
-    modalBtns: boolean
     content: any
+    save?: any
+    modalBtns?: boolean
     onSave?: any
     onCancel?: any
 }
 
 const useModal = ({
     title,
-    save,
-    modalBtns,
     content,
+    save,
+    modalBtns = false,
     onSave,
     onCancel
 }: useModalProps) => {
@@ -24,9 +24,11 @@ const useModal = ({
     const closeModal = () => setOpen(false)
 
     const confirm = () => {
-        save()
-        if(onSave != undefined){
-            onSave()
+        if(save != undefined){
+            save()
+            if(onSave != undefined){
+                onSave()
+            }
         }
     }
 
