@@ -28,8 +28,8 @@ const UsersForm = ({
 
     const getRoles = () => {
         rolesService.findAll().then(
-            (res: any) => {
-                setRoles(res.data)
+            res => {
+                setRoles(res)
             }
         ).catch(error => {
             const { status, message } = httpErrorHandler(error);

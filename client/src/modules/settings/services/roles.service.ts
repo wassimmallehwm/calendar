@@ -6,6 +6,8 @@ class RolesService extends BaseService {
 
     private static instance: RolesService;
 
+    private roles: Role[] | undefined
+
     constructor() {
         super();
     }
@@ -21,8 +23,13 @@ class RolesService extends BaseService {
         return `${this.SRC_URL}${apiUrl}`
     }
 
-    findAll(query?: any){
-        return this.httpClient(this.httpUrl(''), "GET", query);
+    async findAll(query?: any){
+        if(this.roles)
+            return this.roles
+        else {
+            this.roles = await (await this.httpClient<Role[]>(this.httpUrl(''), "GET", query)).data
+            return this.roles
+        }
     }
 
     findOne(id: string){
