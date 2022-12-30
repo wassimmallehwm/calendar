@@ -13,6 +13,7 @@ interface ModalProps {
     children?: any
     showOverlay?: boolean
     overlay?: any
+    fullHeight?: boolean
 }
 
 const Modal = ({
@@ -24,7 +25,8 @@ const Modal = ({
     footerBtns,
     children,
     showOverlay,
-    overlay
+    overlay,
+    fullHeight
 }: ModalProps) => {
     const cancelButtonRef = useRef(null)
     return (
@@ -70,7 +72,7 @@ const Modal = ({
                                 </Button>
                             </div>
                             <hr />
-                            <div className='p-0 relative'>
+                            <div className={`p-0 relative ${fullHeight ? 'h-96 overflow-y-auto' : ''}`}>
                                 {showOverlay && (
                                     <div  className='absolute top-0 left-0 w-full h-full z-20 flex items-center justify-center bg-black opacity-50'>
                                         {overlay}
