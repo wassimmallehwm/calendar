@@ -29,11 +29,11 @@ const GroupsUsersItem = ({
       </div>
       {
         inGroup() ? (
-          <Button outline rounded color='secondary' onClick={() => removeFromGroup(user)}>
+          <Button title="Remove" outline rounded color='secondary' onClick={() => removeFromGroup(user)}>
             <FaTimes/>
           </Button>
         ) : (
-          <Button outline rounded color='primary' onClick={() => addToGroup(user)}>
+          <Button title="Add" outline rounded color='primary' onClick={() => addToGroup(user)}>
             <FaPlus/>
           </Button>
         )

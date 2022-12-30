@@ -4,7 +4,7 @@ import usersService from '@modules/users/services/users.service'
 import { Input } from '@shared/components/form'
 import httpErrorHandler from '@utils/error-handler'
 import { showLoading } from '@utils/toast'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import GroupsUsersItem from '../groups-users-item/GroupsUsersItem'
 
 type GroupsUsersProps = {
@@ -14,7 +14,7 @@ type GroupsUsersProps = {
 const GroupsUsers = ({
     group
 }: GroupsUsersProps) => {
-    const [users, setUsers] = useState<Account[] | undefined>();
+    const [users, setUsers] = useState<Account[]>([]);
     const [loading, setLoading] = useState<any>(false);
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -24,17 +24,18 @@ const GroupsUsers = ({
         page: 1,
         limit: 10,
         sortField: null,
-        sortOrder: null
+        sortOrder: null,
+        search: ''
     })
-    const [search, setSearch] = useState<string>('')
+
+    const listInnerRef = useRef<HTMLDivElement>(null)
 
     const getUsers = () => {
         setDataLoading(true)
-        usersService.list({ ...dataState, search }).then(
+        usersService.list({ ...dataState }).then(
             res => {
-                setUsers(res.data.docs)
+                setUsers(prev => [...prev, ...res.data.docs])
                 setTotalRecords(res.data.total)
-                setDataLoading(false)
             }
         ).catch(error => {
             const { status, message } = httpErrorHandler(error);
@@ -44,26 +45,22 @@ const GroupsUsers = ({
 
     useEffect(() => {
         getUsers()
-    }, [dataState, search])
+    }, [dataState])
 
-    const getUsersInGroup = () => {
-        return users?.filter(user => user.groups?.find(elem => elem._id == group._id) != undefined)
-    }
-
-    const getUsersOutGroup = () => {
-        return users?.filter(user => user.groups?.find(elem => elem._id == group._id) == undefined)
-    }
-
-    const onSuccess = (user: Account) => {
-
+    const onSearch = (e: any) => {
+        setUsers([])
+        setDataState((prev: any) => ({
+            ...prev,
+            search: e.target.value,
+            page: 1
+        }))
     }
 
     const saveAccount = async (user: Account, onError: any) => {
         setLoading(true)
         try {
             await usersService.update(user._id!, user)
-            onSuccess(user)
-        } catch (error) {
+        } catch (error: any) {
             const { message } = httpErrorHandler(error);
             onError(user)
             //showToast('error', message)
@@ -104,11 +101,23 @@ const GroupsUsers = ({
         }))
     }
 
+    const onScroll = () => {
+        if (listInnerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+            console.log({ scrollTop, scrollHeight, clientHeight })
+            if (scrollTop + clientHeight === scrollHeight && totalRecords > users?.length!) {
+                setDataState((prev: any) => ({ ...prev, page: ++prev.page }))
+            }
+        }
+    };
+
     return (
         <div className='flex flex-col gap-2'>
             <Input type="text" autoComplete='off' name="code" placeholder='Search'
-                onChange={(e: any) => setSearch(e.target.value)} value={search} />
-            <div className="flex flex-col justify-center px-2 gap-2">
+                onChange={onSearch} value={dataState.search} />
+            <div onScroll={onScroll}
+                ref={listInnerRef}
+                className="flex flex-col h-72 overflow-y-auto px-2 gap-2">
                 {
                     users?.map(user => (
                         <div key={user._id}>
@@ -118,6 +127,10 @@ const GroupsUsers = ({
                         </div>
                     ))
                 }
+
+                {dataLoading ? (
+                    <p className='text-center font-bold text-gray-700'>Loading...</p>
+                ) : null}
             </div>
         </div>
     )

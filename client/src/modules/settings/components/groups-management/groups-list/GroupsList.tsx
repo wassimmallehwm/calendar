@@ -39,7 +39,7 @@ const GroupsList = () => {
     })
 
     const usersModal = useModal({
-        title: 'Accounts',
+        title: group?.label || '',
         modalBtns: false,
         fullHeight: true,
         content: <GroupsUsers group={group!}/>

@@ -14,7 +14,7 @@ const httpErrorHandler = (e: any): HttpError => {
     if (isAxiosError(e)) {
         error = {
             status: e.response?.status || 500,
-            message: e.response?.data.message || 'Server error'
+            message: e.response?.data?.message || 'Server error'
         }
     } else {
         error = {
