@@ -8,7 +8,7 @@ type useModalProps = {
     modalBtns?: boolean
     onSave?: any
     onCancel?: any
-    fullHeight?: boolean
+    fixedHeight?: boolean
 }
 
 const useModal = ({
@@ -18,7 +18,7 @@ const useModal = ({
     modalBtns = false,
     onSave,
     onCancel,
-    fullHeight
+    fixedHeight
 }: useModalProps) => {
     const [open, setOpen] = useState<boolean>(false);
 
@@ -49,7 +49,7 @@ const useModal = ({
             cancel={cancel}
             footerBtns={modalBtns}
             confirm={confirm}
-            fullHeight={fullHeight}
+            fixedHeight={fixedHeight}
         >
             {content}
 
