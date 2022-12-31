@@ -48,15 +48,14 @@ const Dropdown = ({
                                         {item.label}
                                     </Link>
                                 ) : (
-                                    <span
+                                    <div
                                         onClick={item.action}
                                         className={classNames(
                                             active ? 'bg-gray-100' : '',
                                             'block px-4 py-2 text-sm text-gray-700 cursor-pointer'
-                                        )}
-                                    >
-                                        {item.label}
-                                    </span>
+                                        )}>
+                                        {item.component != undefined ? item.component : item.label}
+                                    </div>
                                 )
                             }}
                         </Menu.Item>

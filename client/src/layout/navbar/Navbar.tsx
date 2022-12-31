@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { Config } from '@config/Config'
 import { Button, Dropdown } from '@shared/components'
 import { DropdownItem } from '@shared/types'
+import { Account } from '@modules/users/models/Account'
 
 
 
@@ -40,16 +41,23 @@ const Navbar = ({
         navigate('/profile')
     }
 
-    const dropdownItems: DropdownItem[] = [
-        {
-            label: 'Profil',
-            action: toProfil
-        },
-        {
-            label: 'Sign out',
-            action: onLogout
-        }
-    ]
+    const dropdownItems = (user: Account): DropdownItem[] => {
+        return [
+            {
+                component: (
+                    <div className="flex items-center gap-4">
+                        <img className="h-8 w-8 rounded-full" src={userImage(user?.imagePath!)} alt={user?.displayName} />
+                        {user?.displayName}
+                    </div>
+                ),
+                action: toProfil
+            },
+            {
+                label: 'Sign out',
+                action: onLogout
+            }
+        ]
+    }
     return (
         <header className="bg-slate-50 shadow-md h-16 flex items-center justify-center w-full border-b-2 border-b-gray-200">
             <div className="flex flex-grow items-center justify-between px-4 h-full">
@@ -83,7 +91,7 @@ const Navbar = ({
                             <Dropdown trigger={(
                                 <img className="h-8 w-8 rounded-full" src={userImage("user_default")} alt="user" />
                             )}
-                                items={dropdownItems}
+                                items={dropdownItems(user!)}
                             />
                         ) : (
                             <Button color='primary' onClick={() => navigate('/login')}>
