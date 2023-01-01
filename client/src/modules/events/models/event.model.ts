@@ -53,6 +53,8 @@ export const formatCalendarToEvent = (data: any) => {
         backgroundColor: data.backgroundColor,
         eventUrl: data.extendedProps.eventUrl,
         isPrivate: data.extendedProps.isPrivate,
+        appNotifs: data.extendedProps.appNotifs,
+        emailNotifs: data.extendedProps.emailNotifs,
         allowedViewers: data.extendedProps.allowedViewers,
         createdBy: data.extendedProps.createdBy
     }

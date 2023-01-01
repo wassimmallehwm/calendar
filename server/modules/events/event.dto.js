@@ -21,6 +21,8 @@ module.exports = class EventDto {
         endTime,
         eventUrl,
         isPrivate,
+        appNotifs,
+        emailNotifs,
         allowedViewers,
         createdBy,
         createdAt
@@ -39,6 +41,8 @@ module.exports = class EventDto {
         this.end = formatEventDate(endDate, endTime);
         this.eventUrl = eventUrl
         this.isPrivate = isPrivate ? isPrivate : false
+        this.appNotifs = appNotifs
+        this.emailNotifs = emailNotifs
         this.allowedViewers = allowedViewers
         this.createdBy = createdBy ? new UserDto(createdBy) : null
         this.createdAt = createdAt

@@ -51,6 +51,12 @@ const EventSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    appNotifs: {
+        type: Boolean
+    },
+    emailNotifs: {
+        type: Boolean
+    },
     allowedEditors: {
         type: [mongoose.Schema.Types.ObjectId],
         required: true,
