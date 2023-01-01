@@ -2,6 +2,8 @@ const multer = require('multer')
 const fs = require('fs')
 const os = require('os');
 const exec = require('child_process').exec;
+const { zip } = require('zip-a-folder');
+const path = require('path');
 
 class FilesHandler {
     instance;
@@ -23,7 +25,7 @@ class FilesHandler {
     createDir = (directory, callback) => {
         let cmd = ''
         let directoryPath = ''
-        if(os.platform() == 'win32'){
+        if (os.platform() == 'win32') {
             directoryPath = directory.join('\\')
             cmd = `md ${directory.join('\\')}`
         } else {
@@ -60,6 +62,15 @@ class FilesHandler {
         const filePath = `public/${resourceType}/${resourceId}/${filename}`;
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
+        }
+    }
+
+    zipFolder = async (folderPath) => {
+        try{
+            await zip(folderPath, `${folderPath}.zip`)
+            return `${folderPath}.zip`
+        } catch(error){
+            console.error(error)
         }
     }
 

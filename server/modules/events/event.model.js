@@ -51,10 +51,6 @@ const EventSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isPrivate: {
-        type: Boolean,
-        default: false
-    },
     allowedEditors: {
         type: [mongoose.Schema.Types.ObjectId],
         required: true,

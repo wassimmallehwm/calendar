@@ -1,3 +1,4 @@
+const { createBackup } = require("../../database/backup");
 const { ErrorsHandler } = require("../../utils");
 const AppConfigService = require("./app-config.service");
 const ENTITY = "App Config"
@@ -59,6 +60,17 @@ module.exports.logo = async (req, res) => {
         res.status(status).sendFile(content);
     } catch (err) {
         const { status, message } = ErrorsHandler.handle(err, "AppConfigController:logo")
+        res.status(status).json({ message, entity: ENTITY })
+    }
+}
+
+module.exports.generateBackup = async (req, res) => {
+    try{
+        const result = await createBackup()
+        res.download(result)
+        //res.send(result);
+    } catch (err) {
+        const { status, message } = ErrorsHandler.handle(err, "AppConfigController:generateBackup")
         res.status(status).json({ message, entity: ENTITY })
     }
 }

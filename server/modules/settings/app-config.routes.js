@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { authenticated, admin } = require('../../security/middlewares');
 const { FilesHandler } = require('../../utils');
-const { find, update, uploadLogo, logo } = require('./app-config.controller');
+const { find, update, uploadLogo, logo, generateBackup } = require('./app-config.controller');
 
 router.get('/', find);
 
@@ -16,5 +16,12 @@ router.put(
     FilesHandler.upload('images').single('logo'),
     uploadLogo
 );
+
+router.post(
+    '/backup',
+    authenticated,
+    admin,
+    generateBackup
+)
 
 module.exports = router;

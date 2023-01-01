@@ -13,7 +13,9 @@ const expressMiddelwares = (app, dir) => {
     allowedHeaders: [
       "content-type",
       "access_token",
-      "refresh_token"
+      "refresh_token",
+      "responsetype",
+      "headers"
     ],
     preflightContinue: true
   }));

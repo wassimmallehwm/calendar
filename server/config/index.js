@@ -1,4 +1,5 @@
 module.exports = {
+    ROOT_DIR: __dirname,
     APP_NAME: process.env.APP_NAME || 'events',
     DATABASE_URL: process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/events',
     PORT: process.env.PORT || 4000,
