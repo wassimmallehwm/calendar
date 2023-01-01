@@ -104,7 +104,6 @@ const GroupsUsers = ({
     const onScroll = () => {
         if (listInnerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-            console.log({ scrollTop, scrollHeight, clientHeight })
             if (scrollTop + clientHeight === scrollHeight && totalRecords > users?.length!) {
                 setDataState((prev: any) => ({ ...prev, page: ++prev.page }))
             }

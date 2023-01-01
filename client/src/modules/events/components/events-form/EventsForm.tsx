@@ -2,7 +2,7 @@ import { categoriesService } from '@modules/settings';
 import { Category, Group } from '@modules/settings/models';
 import groupsService from '@modules/settings/services/groups.service';
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Checkbox, Input, Select, MultipleSelect } from '../../../../shared/components/form';
+import { Input, Select, MultipleSelect, Toggle } from '@shared/components/form';
 import { Event } from '../../models/event.model';
 
 interface EventsFormProps {
@@ -44,20 +44,24 @@ const EventsForm = ({
         category,
         eventUrl,
         isPrivate,
+        appNotifs,
+        emailNotifs,
         allowedViewers,
     } = event
 
     const onChange = (e: ChangeEvent<any>) => {
-        if (e.target.name == 'isPrivate') {
-            setEvent((prev: Event) => ({ ...prev, [e.target.name]: !prev.isPrivate }))
-        } else {
-            setEvent({ ...event, [e.target.name]: e.target.value })
-        }
+        setEvent({ ...event, [e.target.name]: e.target.value })
+    }
+
+    const onChangeBool = (value: boolean, field: string) => {
+        setEvent({ ...event, [field]: value })
     }
 
     const onChangeViewers = (newValue: any[]) => {
         setEvent({ ...event, allowedViewers: newValue })
     }
+
+    const [enabled, setEnabled] = useState(false)
 
     return (
         <form className='flex flex-col gap-6'>
@@ -153,7 +157,8 @@ const EventsForm = ({
 
             <div className='flex items-center justify-between gap-4'>
                 <div className='w-full'>
-                    <Checkbox checked={isPrivate!} label="Private" name="isPrivate" onChange={onChange} />
+                    <Toggle enabled={isPrivate!} label="Private"
+                        onChange={(val: boolean) => onChangeBool(val, "isPrivate")} />
                 </div>
 
                 {
@@ -176,6 +181,23 @@ const EventsForm = ({
                         </div>
                     ) : null
                 }
+            </div>
+
+            <div>
+            <span className='mb-2 block font-medium text-gray-700'> Notify participants by:</span>
+            <div className='flex items-center justify-between gap-4'>
+
+                <div className='w-full'>
+                    <Toggle enabled={appNotifs!} label="App notification"
+                        onChange={(val: boolean) => onChangeBool(val, "appNotifs")} />
+                </div>
+
+                <div className='w-full'>
+                    <Toggle enabled={emailNotifs!} label="Email"
+                        onChange={(val: boolean) => onChangeBool(val, "emailNotifs")} />
+                </div>
+
+            </div>
             </div>
 
         </form>

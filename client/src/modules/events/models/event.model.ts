@@ -16,6 +16,8 @@ export type Event = {
     eventUrl?: string,
     isPrivate?: boolean,
     allowedViewers?: any[],
+    appNotifs?: boolean,
+    emailNotifs?: boolean,
     createdBy?: Account
 }
 
@@ -30,6 +32,8 @@ export const initEvent: Event = {
     category: EmptyCategory,
     eventUrl: '',
     isPrivate: false,
+    appNotifs: true,
+    emailNotifs: true,
     allowedViewers: []
 }
 
