@@ -1,19 +1,32 @@
-const { notif_enums } = require("../../constants/notification")
+const notif_enums = {
+    EVENT_CREATED: 'EVENT_CREATED',
+    EVENT_UPDATED: 'EVENT_UPDATED',
+    SUBSCRIPTION_REQ_REJECTED: 'SUBSCRIPTION_REQ_REJECTED'
+}
 
-const sub_req_def = 'Your subscription request was'
-const sub_req_new = 'asked to join the course :'
 
-module.exports.notif_types = {
-    [notif_enums.SUBSCRIPTION_REQ_SENT]: {
-        SUBJECT: 'New subscription request',
-        CONTENT: `$user ${sub_req_new} $course`
+const notif_types = {
+    [notif_enums.EVENT_CREATED]: ({
+        title,
+        createdBy
+    }) => {
+        return {
+            SUBJECT: 'New event created',
+            CONTENT: `${createdBy} created a new event: ${title}`
+        }
     },
-    [notif_enums.SUBSCRIPTION_REQ_APPROVED]: {
-        SUBJECT: 'Subscription request approved',
-        CONTENT: `Congratulations, ${sub_req_def} approved!`
+    [notif_enums.EVENT_UPDATED]: ({
+        title,
+        createdBy
+    }) => {
+        return {
+            SUBJECT: `Event updated`,
+            CONTENT: `Event ${title} has been updated`
+        }
     },
-    [notif_enums.SUBSCRIPTION_REQ_REJECTED]: {
-        SUBJECT: 'Subscription request rejected',
-        CONTENT: `Unfortunately, ${sub_req_def} rejected! \n $reason.`
-    }
+}
+
+module.exports = {
+    notif_enums,
+    notif_types
 }

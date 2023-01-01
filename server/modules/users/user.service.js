@@ -121,6 +121,25 @@ class UserService {
         }
     }
 
+    findAllMinim = async (query = {}) => {
+        try {
+            let result = await User.find(query)
+                .select('_id')
+                .exec()
+            return new ResponseSuccess({
+                status: 200,
+                content: result
+            })
+        } catch (err) {
+            console.error(err);
+            const { status, message } = ErrorsHandler.handle(err, "UserService:findAllMinim")
+            return new ResponseError({
+                status,
+                message
+            })
+        }
+    }
+
     findAllPaginated = async ({ page, limit, sortField, sortOrder, search }) => {
         try {
             let filter = {}
@@ -136,7 +155,7 @@ class UserService {
                 .count()
                 .exec();
 
-                console.log(JSON.stringify(filter))
+            console.log(JSON.stringify(filter))
 
             let result = await User.find(filter)
                 .skip((page - 1) * limit)
@@ -276,7 +295,7 @@ class UserService {
     createMockUsers = async (roleId) => {
         for (let index = 1; index < 20; index++) {
             let i = 0
-            if(index < 10){
+            if (index < 10) {
                 i = `0${index}`
             } else {
                 i = index
