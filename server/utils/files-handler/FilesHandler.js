@@ -4,9 +4,11 @@ const os = require('os');
 const exec = require('child_process').exec;
 const { zip } = require('zip-a-folder');
 const path = require('path');
+const { ROOT_DIR } = require('../../config');
 
 class FilesHandler {
     instance;
+    rootDir = ROOT_DIR.split('config')[0].slice(0, -1)
 
     constructor() {
     }
@@ -65,10 +67,12 @@ class FilesHandler {
         }
     }
 
-    zipFolder = async (folderPath) => {
+    zipFolder = async (folderPath, folderName) => {
         try{
-            await zip(folderPath, `${folderPath}.zip`)
-            return `${folderPath}.zip`
+            const zipPath = path.join(this.rootDir, 'public', `${folderName}.zip`)
+            
+            await zip(folderPath, zipPath)
+            return `${folderName}.zip`
         } catch(error){
             console.error(error)
         }

@@ -184,20 +184,22 @@ const EventsForm = ({
             </div>
 
             <div>
-            <span className='mb-2 block font-medium text-gray-700'> Notify participants by:</span>
-            <div className='flex items-center justify-between gap-4'>
+                <span className='mb-2 block font-medium text-gray-700'> 
+                    Notify participants by:
+                </span>
+                <div className='flex items-center justify-between gap-4'>
 
-                <div className='w-full'>
-                    <Toggle enabled={appNotifs!} label="App notification"
-                        onChange={(val: boolean) => onChangeBool(val, "appNotifs")} />
+                    <div className='w-full'>
+                        <Toggle enabled={appNotifs!} label="App notification"
+                            onChange={(val: boolean) => onChangeBool(val, "appNotifs")} />
+                    </div>
+
+                    <div className='w-full'>
+                        <Toggle enabled={emailNotifs!} label="Email"
+                            onChange={(val: boolean) => onChangeBool(val, "emailNotifs")} />
+                    </div>
+
                 </div>
-
-                <div className='w-full'>
-                    <Toggle enabled={emailNotifs!} label="Email"
-                        onChange={(val: boolean) => onChangeBool(val, "emailNotifs")} />
-                </div>
-
-            </div>
             </div>
 
         </form>

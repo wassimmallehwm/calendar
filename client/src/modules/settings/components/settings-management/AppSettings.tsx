@@ -1,10 +1,11 @@
 import React, { ChangeEvent, useContext, useRef, useState } from 'react'
 import { SettingsContext } from '@contexts/settings/SettingsContext'
-import { appImage } from '@utils/filePath'
+import { appImage, publicFile } from '@utils/filePath'
 import settingsService from '@modules/settings/services/settings.service'
-import { showToast, toastError } from '@utils/toast'
+import { showToast, toastError, toastSuccess } from '@utils/toast'
 import { Settings } from '@shared/types'
 import { Button } from '@shared/components'
+import { FaDownload } from 'react-icons/fa'
 
 const AppSettings = () => {
 
@@ -57,6 +58,24 @@ const AppSettings = () => {
     }
   }
 
+  const downloadBackup = async () => {
+    try {
+      const { data } = await settingsService.generateBackup()
+      const link = document.createElement("a");
+      link.href = publicFile(data)
+      link.setAttribute("download", data);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toastSuccess("Backup downloaded")
+    } catch (e: any) {
+      console.error(e)
+      toastError('Action failed')
+    }
+
+  }
+
+
 
   return (
     <div className='main-div'>
@@ -74,15 +93,21 @@ const AppSettings = () => {
       </div>
 
       <div className='p-4 m-4'>
-        
+
         <div className='flex items-center justify-between gap-4'>
-          
+
           <div>
             <label className="text-sm font-bold text-gray-600 block">
               App name
             </label>
             <input type="text" name="name" value={currentSettings?.name} onChange={onChange}
               className="w-full p-2 border border-gray-300 rounded mt-1" />
+          </div>
+
+          <div>
+            <Button color='primary' onClick={downloadBackup}>
+              <div className='flex items-center gap-2'><FaDownload/> Backup</div>
+            </Button>
           </div>
 
         </div>

@@ -13,7 +13,7 @@ const createBackup = async () => {
         await exec(cmd);
         const dataPath = path.join(rootDir, APP_NAME)
         console.log("Database backup generated")
-        const result = await FilesHandler.zipFolder(dataPath)
+        const result = await FilesHandler.zipFolder(dataPath, APP_NAME)
         return result
     } catch (e) {
         //runBackup = false;
@@ -25,7 +25,6 @@ const restoreBackup = async () => {
     const cmd = `mongorestore --host localhost --port 27017 --db ${APP_NAME} ${rootDir}`
     try {
         await exec(cmd);
-        const dataPath = path.join(rootDir, APP_NAME)
         console.log("Backup restored")
     } catch (e) {
         console.error(e);

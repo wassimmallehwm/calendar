@@ -10,6 +10,10 @@ export const appImage = (path: string) => {
     return path ? `${Config.getConfig().publicUrl}images/${path}` : placeholder
 }
 
+export const publicFile = (path: string) => {
+    return `${Config.getConfig().publicUrl}${path}`
+}
+
 export const homePageImage = () => {
     return `${Config.getConfig().publicUrl}homePage.webp`
 }

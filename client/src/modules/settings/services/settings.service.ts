@@ -33,6 +33,12 @@ class SettingsService extends BaseService {
         return this.httpClient<Settings>(this.httpUrl('logo'), 'PUT', data);
     }
 
+    generateBackup(){
+        return this.httpClient<any>(this.httpUrl('backup'), 'POST', null, {
+            'Content-Type': 'multipart/form-data'
+        });
+    }
+
 }
 
 export default SettingsService.getInstance();

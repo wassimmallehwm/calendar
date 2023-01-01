@@ -66,9 +66,9 @@ module.exports.logo = async (req, res) => {
 
 module.exports.generateBackup = async (req, res) => {
     try{
+        req.header("Content-Type", "application/zip"); 
         const result = await createBackup()
-        res.download(result)
-        //res.send(result);
+        res.send(result)
     } catch (err) {
         const { status, message } = ErrorsHandler.handle(err, "AppConfigController:generateBackup")
         res.status(status).json({ message, entity: ENTITY })
