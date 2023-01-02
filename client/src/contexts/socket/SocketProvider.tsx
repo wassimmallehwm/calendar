@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Config } from '@config/Config';
 import { SocketContext } from './SocketContext';
+import { Account } from '@modules/users/models/Account';
 
 
 const initState = {
@@ -29,7 +30,7 @@ function socketReducer(state: any, action: any) {
 export const SocketProvider = (props?: any) => {
     const [state, dispatch] = useReducer(socketReducer, initState);
 
-    const connect = (userId: string, roles: string[] = []) => {
+    const connect = (user: Account) => {
         const socket = io(
             Config.getConfig().socketUrl, {
             transports: ['websocket'],
@@ -40,10 +41,11 @@ export const SocketProvider = (props?: any) => {
             reconnectionDelay: 0,
             reconnectionAttempts: 10,
             query: {
-                userId
+                userId: user._id,
+                groups: user.groups?.map(group => group._id).join(','),
+                role: user.role?._id
             }
         })
-        socket.emit('user_roles', roles)
         dispatch({
             type: 'CONNECT',
             payload: socket

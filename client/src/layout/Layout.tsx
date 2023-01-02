@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SettingsContext } from '@contexts/settings/SettingsContext'
 import { settingsService } from '@modules/settings'
 import { appImage } from '@utils/filePath'
-import { AuthContext } from '@contexts/auth/AuthContext'
 import Navbar from './navbar/Navbar'
 import Sidebar from './sidebar/Sidebar'
+import { AuthContext, SettingsContext, SocketContext } from '@contexts/index'
 
 const Layout = ({ children }: any) => {
     const { user } = useContext(AuthContext)
+    const { socket, connect, disconnect } = useContext(SocketContext)
     const { settings, setSettings } = useContext(SettingsContext)
     const [isSidebarOpen, openSidebar] = useState<boolean>(false)
 
@@ -23,6 +23,15 @@ const Layout = ({ children }: any) => {
 
     useEffect(() => {
         importSettings()
+
+        if(user){
+            disconnect()
+            connect(user)
+        }
+
+        return () => {
+            disconnect()
+        }
     }, [])
 
     const toggleSidebar = () => {

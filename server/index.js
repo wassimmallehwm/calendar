@@ -30,7 +30,7 @@ FilesHandler.createDir(['public'], () => console.log('Public folder created'))
 FilesHandler.createDir(['public', 'images'], () => console.log('Images folder created'))
 FilesHandler.createDir(['public', 'users'], () => console.log('Users folder created'))
 
-// ioConfig(io)
+ioConfig(io)
 server.listen(PORT, () => {
     console.log('Listening on port ' + PORT);
 });

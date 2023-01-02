@@ -29,24 +29,24 @@ const ioConfig = (io) => {
     }
 
     io.on('connect', (socket) => {
-        console.log("User connected : ", socket.handshake.query.userId)
-        socket.join(socket.handshake.query.userId)
+        console.log("User connected : ", socket.handshake.query)
+        // socket.join(socket.handshake.query.userId)
 
-        socket.on('join_channel', channelId => {
-            socket.join(channelId)
-        })
+        // socket.on('join_channel', channelId => {
+        //     socket.join(channelId)
+        // })
 
-        socket.on('user_roles', data => {
-            data.forEach(role => socket.join(role))
-            const clients = io.sockets.adapter.rooms.get('ADMIN');
-            console.log(clients)
-        })
+        // socket.on('user_roles', data => {
+        //     data.forEach(role => socket.join(role))
+        //     const clients = io.sockets.adapter.rooms.get('ADMIN');
+        //     console.log(clients)
+        // })
 
-        socket.on('message', data => {
-            console.log(data)
-            const { _id, firstname, lastname, channel, message } = data
-            socket.broadcast.to(channel).emit('message_recieved', data)
-        })
+        // socket.on('message', data => {
+        //     console.log(data)
+        //     const { _id, firstname, lastname, channel, message } = data
+        //     socket.broadcast.to(channel).emit('message_recieved', data)
+        // })
 
         socket.on(addUser, (userId) => {
             //socket.id = userId;
