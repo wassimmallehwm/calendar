@@ -89,7 +89,7 @@ const Navbar = ({
                     {
                         user ? (
                             <Dropdown trigger={(
-                                <img className="h-8 w-8 rounded-full" src={userImage("user_default")} alt="user" />
+                                <img className="h-10 w-h-10 rounded-full" src={userImage("user_default")} alt="user" />
                             )}
                                 items={dropdownItems(user!)}
                             />
