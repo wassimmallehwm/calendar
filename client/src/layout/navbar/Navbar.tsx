@@ -78,7 +78,7 @@ const Navbar = ({
                         initMenus().map((menu: any) => (
                             <NavLink className="h-full"
                                 key={menu.label} to={menu.url}>
-                                <li className="px-2 h-full cursor-pointer rounded-sm flex items-center justify-between hover:bg-gray-200">
+                                <li className="px-2 h-full text-sm cursor-pointer rounded-sm flex items-center justify-between hover:bg-gray-200">
                                     <span className="mx-4"> {t(`titles.${menu.label}`)} </span>
                                 </li>
                             </NavLink>

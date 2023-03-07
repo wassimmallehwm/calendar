@@ -46,7 +46,7 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-primary-50 h-full flex justify-center items-center pb-20">
+        <div className="bg-primary-50 h-full flex justify-center items-center">
             <div className="max-w-md w-full mx-auto bg-white px-8 py-8 rounded-lg shadow-lg">
                 <div className="max-w-md w-full mx-auto flex flex-col items-center gap-4 py-2">
                     <img src={appImage(settings?.logo!)} className="w-32 text-center" />

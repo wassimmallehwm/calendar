@@ -2,8 +2,9 @@ import { Account } from "@modules/users/models/Account";
 import { Settings } from "@shared/types";
 
 class StorageService {
-    private _SETTINGS = "settings";
-    private _USER_DATA = "userData";
+    private PREFIX = "events_"
+    private _SETTINGS = `${this.PREFIX}settings`;
+    private _USER_DATA = `${this.PREFIX}userData`;
 
     private static instance: StorageService;
 

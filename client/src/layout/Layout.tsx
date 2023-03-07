@@ -24,7 +24,7 @@ const Layout = ({ children }: any) => {
     useEffect(() => {
         importSettings()
 
-        if(user){
+        if (user) {
             disconnect()
             connect(user)
         }
@@ -41,9 +41,17 @@ const Layout = ({ children }: any) => {
     }
     return (
         <>
-            <Navbar toggleSidebar={toggleSidebar} />
-            <Sidebar isOpen={isSidebarOpen} close={() => openSidebar(false)}></Sidebar>
-            {isSidebarOpen && <div onClick={() => openSidebar(false)} className='top-0 left-0 w-full h-full fixed bg-black bg-opacity-40 z-10'></div>}
+            {
+                user ? (
+                    <>
+                        <Navbar toggleSidebar={toggleSidebar} />
+                        <Sidebar isOpen={isSidebarOpen} close={() => openSidebar(false)}></Sidebar>
+                        {
+                            isSidebarOpen && <div onClick={() => openSidebar(false)} className='top-0 left-0 w-full h-full fixed bg-black bg-opacity-40 z-10'></div>
+                        }
+                    </>
+                ) : null
+            }
 
             <main className='bg-slate-50 fixed w-full h-full overflow-auto'>
                 {children}
