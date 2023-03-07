@@ -6,6 +6,7 @@ const EventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "User",
+        immutable: true
     },
     title: {
         type: String,
