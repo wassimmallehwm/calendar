@@ -29,6 +29,8 @@ const Layout = ({ children }: any) => {
             connect(user)
         }
 
+        socket?.on('notif', data => console.log("NOTIF : ", data))
+
         return () => {
             disconnect()
         }

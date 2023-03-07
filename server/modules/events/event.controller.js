@@ -4,6 +4,7 @@ const { NotificationsService } = require("../notifications");
 const { notif_enums } = require("../notifications/constants");
 const { UserService } = require("../users");
 const EventsService = require("./event.service");
+const EventNotificationService = require('./event-notification.service')
 
 const SERVICE_NAME = "EventsController"
 const ENTITY_NAME = "Event"
@@ -11,7 +12,7 @@ const ENTITY_NAME = "Event"
 module.exports.create = async (req, res) => {
   try {
     let item = req.body;
-    item.createdBy = req.user
+    item.createdBy = req.user._id
     await setDefaultCategory(item)
     const {
       success,
@@ -105,8 +106,8 @@ module.exports.update = async (req, res) => {
       content,
       message
     } = await EventsService.update(req.params.id, item)
-    sendEventNotif(req.io, content, notif_enums.EVENT_UPDATED)
-    
+    EventNotificationService.sendEventNotif(req.io, content, notif_enums.EVENT_UPDATED)
+
     res.status(status).json(success ? content : { message });
   } catch (err) {
     const { status, message } = ErrorsHandler.handle(err, `${SERVICE_NAME}:update`)
@@ -130,43 +131,15 @@ module.exports.remove = async (req, res) => {
   }
 };
 
-const setDefaultCategory = async(item) => {
+const setDefaultCategory = async (item) => {
+  if (item.category && item.category.id) {
+    item.category = item.category.id
+    return
+  }
   if (!item.category || item.category == "") {
     const defaultCategoryResponse = await categoryService.findDefault()
     if (defaultCategoryResponse.success)
       item.category = defaultCategoryResponse.content._id
-  } else {
-    item.category = item.category._id
-  }
-}
-
-
-const sendEventNotif = async (io, content, notifEnum) => {
-  const { 
-    title,
-    createdBy,
-    groups,
-    isPrivate,
-    appNotifs
-  } = content
-  let users = []
-  if(isPrivate && groups.length > 0){
-    //get users
-  } else {
-    usersResp = await UserService.findAllMinim()
-    users = usersResp.content.map(elem => elem._id)
-  }
-  if(appNotifs){
-    NotificationsService.sendNotifToUsers(
-      io,
-      users,
-      notifEnum,
-      {
-        title,
-        createdBy: createdBy.displayName
-      },
-      'EVENTS'
-    )
   }
 }
 

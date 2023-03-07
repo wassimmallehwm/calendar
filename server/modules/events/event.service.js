@@ -163,6 +163,7 @@ class EventsService {
     }
 
     update = async (id, data) => {
+        console.log("DATA : ", data)
         try {
             const item = await Event.findById(id)
             if (!item)

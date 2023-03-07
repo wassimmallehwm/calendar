@@ -128,6 +128,17 @@ class NotificationsService {
         }
         users.forEach(user => this.sendNotifToUser(io, notifData, user))
     }
+
+    sendNotifToAll = (io, users, notifEnum, data, resource) => {
+        const { SUBJECT, CONTENT } = notif_types[notifEnum](data)
+        const notifData = {
+            subject: SUBJECT,
+            body: CONTENT,
+            resource
+        }
+        io.sockets.in('Global').emit('notif', notifData);
+        users.forEach(user => this.save({...notifData, user}))
+    }
 }
 
 module.exports = NotificationsService.getInstance()

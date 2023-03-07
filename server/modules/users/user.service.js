@@ -121,25 +121,6 @@ class UserService {
         }
     }
 
-    findAllMinim = async (query = {}) => {
-        try {
-            let result = await User.find(query)
-                .select('_id')
-                .exec()
-            return new ResponseSuccess({
-                status: 200,
-                content: result
-            })
-        } catch (err) {
-            console.error(err);
-            const { status, message } = ErrorsHandler.handle(err, "UserService:findAllMinim")
-            return new ResponseError({
-                status,
-                message
-            })
-        }
-    }
-
     findAllPaginated = async ({ page, limit, sortField, sortOrder, search }) => {
         try {
             let filter = {}
@@ -181,6 +162,54 @@ class UserService {
         } catch (err) {
             console.error(err);
             const { status, message } = ErrorsHandler.handle(err, "UserService:findAllPaginated")
+            return new ResponseError({
+                status,
+                message
+            })
+        }
+    }
+
+    findAllMin = async (query = {}) => {
+        try {
+            let result = await User.find(query)
+                .select('_id email firstname lastname')
+                .exec()
+            return new ResponseSuccess({
+                status: 200,
+                content: result
+            })
+        } catch (err) {
+            console.error(err);
+            const { status, message } = ErrorsHandler.handle(err, "UserService:findAllMin")
+            return new ResponseError({
+                status,
+                message
+            })
+        }
+    }
+
+    findMinByGroups = async (groups) => {
+        try {
+            let query = {}
+            if (groups && groups.length > 0) {
+                query = {
+                    $or: []
+                }
+                groups.forEach(group => {
+                    query['$or'].push({ 'groups': group })
+                })
+            }
+            const result = await User.find(query)
+                .select('_id email firstname lastname')
+                .exec()
+            return new ResponseSuccess({
+                status: 200,
+                content: result
+            })
+
+        } catch (err) {
+            console.error(err);
+            const { status, message } = ErrorsHandler.handle(err, "UserService:findMinByGroups")
             return new ResponseError({
                 status,
                 message
