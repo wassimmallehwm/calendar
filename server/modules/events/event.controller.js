@@ -106,7 +106,7 @@ module.exports.update = async (req, res) => {
       content,
       message
     } = await EventsService.update(req.params.id, item)
-    EventNotificationService.sendEventNotif(req.io, content, notif_enums.EVENT_UPDATED)
+    EventNotificationService.sendEventNotif(req.io, req.user._id, content, notif_enums.EVENT_UPDATED)
 
     res.status(status).json(success ? content : { message });
   } catch (err) {

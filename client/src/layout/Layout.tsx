@@ -29,12 +29,21 @@ const Layout = ({ children }: any) => {
             connect(user)
         }
 
-        socket?.on('notif', data => console.log("NOTIF : ", data))
-
         return () => {
             disconnect()
         }
     }, [])
+
+    useEffect(() => {
+        if (socket) {
+            console.log(socket)
+            socket?.on('notif', data => console.log("NOTIF : ", data))
+        }
+
+        return () => {
+            socket?.off('notif')
+        }
+    }, [socket])
 
     const toggleSidebar = () => {
         openSidebar(prev => !prev)

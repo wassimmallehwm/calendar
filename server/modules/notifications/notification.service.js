@@ -15,6 +15,7 @@ const { notif_types, notif_enums } = require("./constants");
 
 const { ResponseSuccess, ResponseError } = require("../../shared/response");
 const { ErrorsHandler } = require("../../utils");
+const { getSocketByUserId } = require("../../socket/users");
 
 const SERVICE_NAME = "NotificationsService"
 
@@ -138,6 +139,20 @@ class NotificationsService {
         }
         io.sockets.in('Global').emit('notif', notifData);
         users.forEach(user => this.save({...notifData, user}))
+    }
+
+    broadcastNotifToAll = (io, users, notifEnum, data, resource) => {
+        const { SUBJECT, CONTENT } = notif_types[notifEnum](data)
+        const notifData = {
+            subject: SUBJECT,
+            body: CONTENT,
+            resource
+        }
+        users.forEach(user => {
+            this.save({...notifData, user})
+            //send notif to every user
+            io.to(getSocketByUserId(user.toString()).id).emit('notif', notifData);
+        })
     }
 }
 

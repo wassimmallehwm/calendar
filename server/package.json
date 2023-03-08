@@ -4,7 +4,7 @@
   "description": "Real estate application",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon -L index.js"
   },
   "nodemonConfig": {
     "ignore": [

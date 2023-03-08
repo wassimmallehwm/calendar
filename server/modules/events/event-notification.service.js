@@ -14,7 +14,7 @@ class EventNotificationService {
 
     static instance = new EventNotificationService()
 
-    sendEventNotif = async (io, content, notifEnum) => {
+    sendEventNotif = async (io, userId, content, notifEnum) => {
 
         try {
             const {
@@ -31,6 +31,7 @@ class EventNotificationService {
 
             let usersResp = null
             let users = []
+            let usersId = []
             let flag = ''
 
             if (isPrivate && allowedViewers.length > 0) {
@@ -40,14 +41,14 @@ class EventNotificationService {
                 usersResp = await UserService.findAllMin()
                 flag = 'ALL'
             }
-            users = usersResp.content //.map(elem => elem._id)
+            users = usersResp.content
+            usersId = users.map(elem => elem._id).filter(elem => elem != userId)
 
             if (appNotifs) {
-                console.log("APP NOTIF to ", users)
                 if (flag == 'ALL') {
-                    NotificationsService.sendNotifToAll(
+                    NotificationsService.broadcastNotifToAll(
                         io,
-                        users.map(elem => elem._id),
+                        usersId,
                         notifEnum,
                         {
                             title,

@@ -1,18 +1,27 @@
+const { addUser, removeSocketByUserId } = require("./users")
 
 const ioConfig = (io) => {
 
     io.on('connect', (socket) => {
+        let { userId, groups, role } = socket.handshake.query
+        addUser(userId, socket)
+
         socket.join('Global')
-        const groups = socket.handshake.query.groups.split(',')
+        groups = groups.split(',')
         if (groups.length > 0) {
             groups.forEach(group => {
-                console.log("group : ",group)
                 socket.join(group)
             });
         }
 
+        socket.on('disconnect', function (e) {
+            console.log("user disconnected");
+            removeSocketByUserId(userId)
+        });
+
         socket.on('connect_error', function (e) {
             console.log("Socket connection error");
+            removeSocketByUserId(userId)
         });
     })
 }
