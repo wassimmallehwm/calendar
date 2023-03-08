@@ -32,36 +32,26 @@ class EventNotificationService {
             let usersResp = null
             let users = []
             let usersId = []
-            let flag = ''
 
             if (isPrivate && allowedViewers.length > 0) {
                 usersResp = await UserService.findMinByGroups(allowedViewers)
-                flag = 'GROUPS'
             } else {
                 usersResp = await UserService.findAllMin()
-                flag = 'ALL'
             }
             users = usersResp.content
             usersId = users.map(elem => elem._id).filter(elem => elem != userId)
 
             if (appNotifs) {
-                if (flag == 'ALL') {
-                    NotificationsService.broadcastNotifToAll(
-                        io,
-                        usersId,
-                        notifEnum,
-                        {
-                            title,
-                            createdBy: createdBy.displayName
-                        },
-                        'EVENTS'
-                    )
-                }
-
-                if (flag == 'GROUPS') {
-                    //Send notif to groups
-                }
-
+                NotificationsService.sendNotifToAll(
+                    io,
+                    usersId,
+                    notifEnum,
+                    {
+                        title,
+                        createdBy: createdBy.displayName
+                    },
+                    'EVENTS'
+                )
             }
 
 
